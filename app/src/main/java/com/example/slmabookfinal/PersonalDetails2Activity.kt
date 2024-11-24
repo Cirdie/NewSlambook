@@ -1,14 +1,15 @@
 package com.example.slmabookfinal
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.SpinnerAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.slmabookfinal.databinding.ActivityPersonalDetails2Binding
-import java.text.SimpleDateFormat
+import com.example.slmabookfinal.utils.ProgressDialog
 import java.util.*
 
 class PersonalDetails2Activity : AppCompatActivity() {
@@ -55,7 +56,7 @@ class PersonalDetails2Activity : AppCompatActivity() {
 
     private fun setupBirthdateSelection() {
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val years = (currentYear..1900).toList().map { it.toString() }
+        val years = (1900..currentYear).reversed().toList().map { it.toString() }
         val months = listOf(
             "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"
@@ -91,7 +92,6 @@ class PersonalDetails2Activity : AppCompatActivity() {
         binding.daySpinner.onItemSelectedListener = onItemSelectedListener
     }
 
-
     private fun calculateAge() {
         val selectedYear = binding.yearSpinner.selectedItem.toString().toIntOrNull()
         val selectedMonth = binding.monthSpinner.selectedItemPosition + 1 // Months are 0-based
@@ -112,14 +112,13 @@ class PersonalDetails2Activity : AppCompatActivity() {
         }
     }
 
-
     private fun validateInputs() {
         val weight = binding.weightInput.text.toString().trim()
         val height = binding.heightInput.text.toString().trim()
 
         when {
             selectedGender == null -> {
-                Toast.makeText(this, "Please select your gender", Toast.LENGTH_SHORT).show()
+                showErrorDialog("Please select your gender")
             }
             binding.ageInput.text.isNullOrEmpty() -> {
                 binding.ageInput.error = "Please provide a valid age"
@@ -134,19 +133,30 @@ class PersonalDetails2Activity : AppCompatActivity() {
                 binding.heightInput.requestFocus()
             }
             else -> {
-                saveDetails()
+                navigateToNextStep()
             }
         }
     }
 
-    private fun saveDetails() {
-        val gender = selectedGender
-        val birthdate = "${binding.monthSpinner.selectedItem} ${binding.daySpinner.selectedItem}, ${binding.yearSpinner.selectedItem}"
-        val age = binding.ageInput.text.toString()
-        val weight = binding.weightInput.text.toString()
-        val height = binding.heightInput.text.toString()
+    private fun navigateToNextStep() {
+        // Show custom progress dialog
+        val progressDialog = ProgressDialog(this)
+        progressDialog.show(ProgressDialog.DialogType.PROGRESS, "Proceeding to the next step...")
 
-        Toast.makeText(this, "Details Saved: $gender, $birthdate, $age, $weight, $height", Toast.LENGTH_SHORT).show()
-        // Proceed to the next step
+        // Simulate delay for showing the dialog, then navigate
+        Handler(Looper.getMainLooper()).postDelayed({
+            progressDialog.dismiss() // Dismiss the dialog
+            val intent = Intent(this, HobbiesActivity::class.java)
+            startActivity(intent)
+            finish() // Close the current activity
+        }, 2000) // 2-second delay
+    }
+
+    private fun showErrorDialog(message: String) {
+        val errorDialog = ProgressDialog(this)
+        errorDialog.show(ProgressDialog.DialogType.ERROR, message)
+        Handler(Looper.getMainLooper()).postDelayed({
+            errorDialog.dismiss()
+        }, 2000)
     }
 }

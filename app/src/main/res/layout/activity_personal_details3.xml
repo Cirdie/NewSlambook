@@ -129,39 +129,84 @@
             android:layout_marginBottom="8dp" />
 
         <!-- Facebook -->
-        <EditText
-            android:id="@+id/facebookInput"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="Facebook"
-            android:background="@drawable/underline_edittext_background"
-            android:padding="8dp"
-            android:textSize="16sp"
-            android:inputType="textUri" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/facebookIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_facebook"
+                android:layout_marginEnd="8dp" />
+
+            <EditText
+                android:id="@+id/facebookInput"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:hint="Paste your profile link here."
+                android:background="@drawable/underline_edittext_background"
+                android:padding="8dp"
+                android:textSize="16sp"
+                android:inputType="textUri" />
+        </LinearLayout>
 
         <!-- Instagram -->
-        <EditText
-            android:id="@+id/instagramInput"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="Instagram"
-            android:background="@drawable/underline_edittext_background"
-            android:padding="8dp"
-            android:textSize="16sp"
-            android:inputType="textUri"
-            android:layout_marginTop="8dp" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                android:id="@+id/instagramIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_instagram"
+                android:layout_marginEnd="8dp" />
+
+            <EditText
+                android:id="@+id/instagramInput"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:hint="Paste your profile link here."
+                android:background="@drawable/underline_edittext_background"
+                android:padding="8dp"
+                android:textSize="16sp"
+                android:inputType="textUri" />
+        </LinearLayout>
 
         <!-- Twitter -->
-        <EditText
-            android:id="@+id/twitterInput"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="Twitter"
-            android:background="@drawable/underline_edittext_background"
-            android:padding="8dp"
-            android:textSize="16sp"
-            android:inputType="textUri"
-            android:layout_marginTop="8dp" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="8dp">
+
+            <ImageView
+                android:id="@+id/twitterIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_twitter"
+                android:layout_marginEnd="8dp" />
+
+            <EditText
+                android:id="@+id/twitterInput"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:hint="Paste your profile link here."
+                android:background="@drawable/underline_edittext_background"
+                android:padding="8dp"
+                android:textSize="16sp"
+                android:inputType="textUri" />
+        </LinearLayout>
     </LinearLayout>
 
     <!-- Continue Button -->
