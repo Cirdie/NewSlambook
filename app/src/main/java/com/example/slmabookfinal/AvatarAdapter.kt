@@ -1,4 +1,4 @@
-package com.example.slmabookfinal.adapters
+package com.example.slmabookfinal
 
 import android.content.Context
 import android.view.View

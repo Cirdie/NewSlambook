@@ -11,12 +11,15 @@ import com.example.slmabookfinal.utils.ProgressDialog
 class PersonalDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPersonalDetailsBinding
-    private var selectedAvatar: Int? = null // To store the selected avatar ID
+    private var selectedAvatar: Int = R.drawable.avatar1 // Set default avatar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPersonalDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Set default avatar
+        binding.avatarImageView.setImageResource(selectedAvatar)
 
         // Handle avatar change
         binding.changeAvatarButton.setOnClickListener {
@@ -47,14 +50,6 @@ class PersonalDetailsActivity : AppCompatActivity() {
                 binding.nicknameInput.error = "Nickname is required"
                 binding.nicknameInput.requestFocus()
             }
-            selectedAvatar == null -> {
-                // Show custom dialog for avatar selection
-                val progressDialog = ProgressDialog(this)
-                progressDialog.show(ProgressDialog.DialogType.ERROR, "Please select an avatar")
-                Handler(Looper.getMainLooper()).postDelayed({
-                    progressDialog.dismiss()
-                }, 2000)
-            }
             else -> {
                 navigateToNextStep()
             }
@@ -72,22 +67,20 @@ class PersonalDetailsActivity : AppCompatActivity() {
             val avatarId = data?.getIntExtra("selectedAvatar", -1)
             if (avatarId != null && avatarId != -1) {
                 selectedAvatar = avatarId
-                binding.avatarImageView.setImageResource(avatarId) // Updated field reference
+                binding.avatarImageView.setImageResource(avatarId)
             }
         }
     }
 
     private fun navigateToNextStep() {
-        // Show custom progress dialog
         val progressDialog = ProgressDialog(this)
         progressDialog.show(ProgressDialog.DialogType.PROGRESS, "Proceeding to the next step...")
 
-        // Simulate delay for showing the dialog, then navigate
         Handler(Looper.getMainLooper()).postDelayed({
-            progressDialog.dismiss() // Dismiss the dialog
+            progressDialog.dismiss()
             val intent = Intent(this, PersonalDetails2Activity::class.java)
             startActivity(intent)
-            finish() // Close the current activity
-        }, 2000) // 2-second delay
+            finish()
+        }, 2000)
     }
 }

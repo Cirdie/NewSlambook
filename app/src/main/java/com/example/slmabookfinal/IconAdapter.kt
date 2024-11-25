@@ -6,28 +6,29 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.slmabookfinal.databinding.ItemIconBinding
 
 class IconAdapter(
-    private val icons: List<Int>, // List of drawable resource IDs
-    private val onIconSelected: (Int) -> Unit // Callback for selected icon
+    private val icons: List<Int>, // List of icon resource IDs
+    private val onIconSelected: (Int) -> Unit // Callback for icon selection
 ) : RecyclerView.Adapter<IconAdapter.IconViewHolder>() {
+
+    private var selectedIcon: Int? = null
 
     inner class IconViewHolder(private val binding: ItemIconBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun bind(iconResId: Int) {
-            binding.iconImageView.setImageResource(iconResId) // Set the icon image
+            binding.iconImage.setImageResource(iconResId)
+            // Highlight the selected icon
+            binding.iconImage.alpha = if (selectedIcon == iconResId) 1.0f else 0.5f
 
-            binding.iconContainer.setOnClickListener {
-                onIconSelected(iconResId) // Trigger callback when an icon is selected
+            binding.root.setOnClickListener {
+                selectedIcon = iconResId
+                onIconSelected(iconResId)
+                notifyDataSetChanged() // Update all items to reflect selection
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IconViewHolder {
-        val binding = ItemIconBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
+        val binding = ItemIconBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return IconViewHolder(binding)
     }
 

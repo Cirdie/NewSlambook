@@ -4,6 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:minWidth="300dp"
+    android:maxWidth="400dp"
     android:background="@drawable/rounded_dialog_background"
     android:padding="16dp">
 
@@ -47,10 +49,11 @@
         android:id="@+id/customQuestionInput"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:hint="Or type a custom question"
+        android:hint="Type your custom question"
         android:background="@drawable/underline_edittext_background"
         android:padding="12dp"
         android:textSize="16sp"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/questionSpinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -1,11 +1,13 @@
-package com.example.slambookfinal
+package com.example.slmabookfinal
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import com.example.slambookfinal.Favorite
 import com.example.slmabookfinal.databinding.FragmentAddFavoriteDialogBinding
 
 class AddFavoriteDialogFragment(
@@ -49,6 +51,15 @@ class AddFavoriteDialogFragment(
                 dismiss()
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // Set fixed dialog width
+        dialog?.window?.setLayout(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT
+        )
     }
 
     override fun onDestroyView() {

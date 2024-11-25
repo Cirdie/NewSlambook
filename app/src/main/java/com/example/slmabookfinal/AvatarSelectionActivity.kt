@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.AdapterView
 import android.widget.GridView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.slmabookfinal.adapters.AvatarAdapter
 
 class AvatarSelectionActivity : AppCompatActivity() {
 

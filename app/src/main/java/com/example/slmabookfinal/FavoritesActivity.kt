@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.slambookfinal.AddFavoriteDialogFragment
 import com.example.slambookfinal.Favorite
 import com.example.slmabookfinal.databinding.ActivityFavoritesBinding
 

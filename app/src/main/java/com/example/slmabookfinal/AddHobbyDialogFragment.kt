@@ -6,15 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.slmabookfinal.databinding.FragmentAddHobbyDialogBinding
-import com.example.slmabookfinal.utils.ProgressDialog
 
-class AddHobbyDialogFragment(
-    private val onHobbyAdded: (Hobby) -> Unit
-) : DialogFragment() {
+class AddHobbyDialogFragment : DialogFragment() {
 
     private lateinit var binding: FragmentAddHobbyDialogBinding
-    private var selectedIconResId: Int = R.drawable.ic_hobbies // Default icon
+    private var onHobbyAdded: ((Hobby) -> Unit)? = null
+    private var selectedIconResId: Int? = null
+
+    private val iconList = listOf(
+        R.drawable.ic_movies,
+        R.drawable.ic_sports,
+        R.drawable.ic_music,
+        R.drawable.ic_hobbies,
+        R.drawable.ic_foods
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,57 +34,42 @@ class AddHobbyDialogFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.closeButton.setOnClickListener {
-            dismiss()
-        }
+        binding.closeButton.setOnClickListener { dismiss() }
 
-        binding.changeIconButton.setOnClickListener {
-            showIconSelectionDialog()
-        }
+        setupIconRecyclerView()
 
         binding.addHobbyButton.setOnClickListener {
             val hobbyName = binding.hobbyNameInput.text.toString().trim()
+
             if (hobbyName.isEmpty()) {
-                binding.hobbyNameInput.error = "Please enter a hobby name"
+                Toast.makeText(requireContext(), "Please enter a hobby name", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val progressDialog = ProgressDialog(requireContext())
-            progressDialog.show(ProgressDialog.DialogType.PROGRESS, "Adding Hobby...")
+            if (selectedIconResId == null) {
+                Toast.makeText(requireContext(), "Please select an icon", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-            // Simulate delay for adding hobby
-            binding.addHobbyButton.postDelayed({
-                progressDialog.dismiss()
-                val newHobby = Hobby(hobbyName, selectedIconResId)
-                onHobbyAdded(newHobby)
-                Toast.makeText(context, "Hobby Added!", Toast.LENGTH_SHORT).show()
-                dismiss()
-            }, 1500)
+            onHobbyAdded?.invoke(Hobby(hobbyName, selectedIconResId!!))
+            dismiss()
         }
     }
 
-    private fun showIconSelectionDialog() {
-        // List of available icons
-        val icons = listOf(
-            R.drawable.ic_creative,
-            R.drawable.ic_sports,
-            R.drawable.ic_music,
-            R.drawable.ic_foods,
-            R.drawable.ic_books
-        )
-
-        val iconSelectionDialog = IconSelectionDialogFragment(icons) { selectedIcon ->
+    private fun setupIconRecyclerView() {
+        binding.iconRecyclerView.layoutManager = GridLayoutManager(requireContext(), 4)
+        binding.iconRecyclerView.adapter = IconAdapter(iconList) { selectedIcon ->
             selectedIconResId = selectedIcon
-            binding.currentIcon.setImageResource(selectedIconResId) // Update the current icon
         }
-        iconSelectionDialog.show(parentFragmentManager, "IconSelectionDialog")
     }
 
     companion object {
         const val TAG = "AddHobbyDialogFragment"
 
         fun newInstance(onHobbyAdded: (Hobby) -> Unit): AddHobbyDialogFragment {
-            return AddHobbyDialogFragment(onHobbyAdded)
+            return AddHobbyDialogFragment().apply {
+                this.onHobbyAdded = onHobbyAdded
+            }
         }
     }
 }
