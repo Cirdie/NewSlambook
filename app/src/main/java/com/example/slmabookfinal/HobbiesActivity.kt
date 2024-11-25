@@ -1,5 +1,6 @@
 package com.example.slmabookfinal
 
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
@@ -22,6 +23,7 @@ class HobbiesActivity : AppCompatActivity() {
 
         setupRecyclerView()
         setupAddHobbyButton()
+        setupProceedButton()
     }
 
     private fun setupRecyclerView() {
@@ -32,7 +34,7 @@ class HobbiesActivity : AppCompatActivity() {
             // Add spacing between items
             addItemDecoration(object : RecyclerView.ItemDecoration() {
                 override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-                    outRect.top = 16
+                    outRect.top = 16 // Spacing in dp
                     outRect.bottom = 16
                 }
             })
@@ -42,6 +44,14 @@ class HobbiesActivity : AppCompatActivity() {
     private fun setupAddHobbyButton() {
         binding.addHobbyButton.setOnClickListener {
             showAddHobbyDialog()
+        }
+    }
+
+    private fun setupProceedButton() {
+        binding.proceedButton.setOnClickListener {
+            val intent = Intent(this, QuestionsActivity::class.java)
+            startActivity(intent)
+            finish() // Optional: Finish this activity if you don't want the user to go back
         }
     }
 

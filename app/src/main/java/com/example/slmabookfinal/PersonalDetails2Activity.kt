@@ -146,7 +146,7 @@ class PersonalDetails2Activity : AppCompatActivity() {
         // Simulate delay for showing the dialog, then navigate
         Handler(Looper.getMainLooper()).postDelayed({
             progressDialog.dismiss() // Dismiss the dialog
-            val intent = Intent(this, HobbiesActivity::class.java)
+            val intent = Intent(this, PersonalDetails3Activity::class.java)
             startActivity(intent)
             finish() // Close the current activity
         }, 2000) // 2-second delay
