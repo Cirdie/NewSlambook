@@ -63,7 +63,7 @@ class AddHobbyDialogFragment(
             R.drawable.ic_sports,
             R.drawable.ic_music,
             R.drawable.ic_foods,
-            R.drawable.ic_reading
+            R.drawable.ic_books
         )
 
         val iconSelectionDialog = IconSelectionDialogFragment(icons) { selectedIcon ->

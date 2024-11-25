@@ -23,6 +23,7 @@ class QuestionsActivity : AppCompatActivity() {
 
         setupRecyclerView()
         setupAddQuestionButton()
+        setupProceedButton()
     }
 
     private fun setupRecyclerView() {
@@ -54,5 +55,14 @@ class QuestionsActivity : AppCompatActivity() {
         }
         addQuestionDialog.show(supportFragmentManager, AddQuestionDialogFragment.TAG)
     }
+
+    private fun setupProceedButton() {
+        binding.proceedButton.setOnClickListener {
+            val intent = Intent(this, FavoritesActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+    }
+
 
 }
