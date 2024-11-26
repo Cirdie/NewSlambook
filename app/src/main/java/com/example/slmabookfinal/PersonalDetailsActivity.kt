@@ -12,28 +12,23 @@ class PersonalDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPersonalDetailsBinding
     private lateinit var progressDialog: ProgressDialog
-    private var personalDetails = PersonalDetails() // Initialize a new PersonalDetails object
+    private lateinit var slambookEntry: SlambookEntry
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPersonalDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialize ProgressDialog
+        // Retrieve the SlambookEntry object passed from CreateActivity
+        slambookEntry = intent.getSerializableExtra("slambookEntry") as? SlambookEntry
+            ?: SlambookEntry()
+
         progressDialog = ProgressDialog(this)
 
-        // Set default avatar
-        binding.avatarImageView.setImageResource(personalDetails.avatarId)
-
-        // Handle avatar change
-        binding.changeAvatarButton.setOnClickListener {
-            openAvatarSelection()
-        }
-
-        // Handle continue button
-        binding.continueButton.setOnClickListener {
-            validateInputs()
-        }
+        // Set avatar and button actions
+        binding.avatarImageView.setImageResource(slambookEntry.avatarId)
+        binding.changeAvatarButton.setOnClickListener { openAvatarSelection() }
+        binding.continueButton.setOnClickListener { validateInputs() }
     }
 
     private fun validateInputs() {
@@ -41,24 +36,27 @@ class PersonalDetailsActivity : AppCompatActivity() {
         val lastName = binding.lastNameInput.text.toString().trim()
         val nickname = binding.nicknameInput.text.toString().trim()
 
+        // Input validation
         when {
             firstName.isEmpty() -> {
                 binding.firstNameInput.error = "First name is required"
-                binding.firstNameInput.requestFocus()
+                return
             }
             lastName.isEmpty() -> {
                 binding.lastNameInput.error = "Last name is required"
-                binding.lastNameInput.requestFocus()
+                return
             }
             nickname.isEmpty() -> {
                 binding.nicknameInput.error = "Nickname is required"
-                binding.nicknameInput.requestFocus()
+                return
             }
             else -> {
-                personalDetails.firstName = firstName
-                personalDetails.lastName = lastName
-                personalDetails.nickname = nickname
-                showProgressDialogAndNavigate()
+                // Save the validated data to the SlambookEntry object
+                slambookEntry.firstName = firstName
+                slambookEntry.lastName = lastName
+                slambookEntry.nickname = nickname
+
+                showProgressAndNavigate()
             }
         }
     }
@@ -73,27 +71,23 @@ class PersonalDetailsActivity : AppCompatActivity() {
         if (requestCode == 100 && resultCode == RESULT_OK) {
             val avatarId = data?.getIntExtra("selectedAvatar", -1)
             if (avatarId != null && avatarId != -1) {
-                personalDetails.avatarId = avatarId
+                slambookEntry.avatarId = avatarId
                 binding.avatarImageView.setImageResource(avatarId)
             }
         }
     }
 
-    private fun showProgressDialogAndNavigate() {
-        // Show custom progress dialog
-        progressDialog.show(ProgressDialog.DialogType.PROGRESS, "Saving your details...")
-
-        // Simulate a delay for saving data
+    private fun showProgressAndNavigate() {
+        progressDialog.show(ProgressDialog.DialogType.PROGRESS, "Saving details...")
         Handler(Looper.getMainLooper()).postDelayed({
             progressDialog.dismiss()
-            navigateToNextStep()
-        }, 2000) // 2-second delay
-    }
 
-    private fun navigateToNextStep() {
-        val intent = Intent(this, PersonalDetails2Activity::class.java)
-        intent.putExtra("personalDetails", personalDetails)
-        startActivity(intent)
-        finish()
+            // Pass the updated SlambookEntry to the next activity
+            val intent = Intent(this, PersonalDetails2Activity::class.java).apply {
+                putExtra("slambookEntry", slambookEntry)
+            }
+            startActivity(intent)
+            finish()
+        }, 2000) // Simulate a delay for user experience
     }
 }

@@ -7,25 +7,27 @@ import com.example.slmabookfinal.databinding.ActivityChooseBinding
 
 class ChooseActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityChooseBinding // View Binding for uniform structure
+    private lateinit var binding: ActivityChooseBinding
+    private var slambookEntry: SlambookEntry? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Initialize View Binding
         binding = ActivityChooseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Set up click listeners for buttons
+        // Retrieve or mock the personalDetails object
+        slambookEntry = intent.getSerializableExtra("personalDetails") as? SlambookEntry ?: SlambookEntry()
+
+        // Set up click listeners
         binding.createButton.setOnClickListener {
-            // Navigate to Create Activity
             val intent = Intent(this, CreateActivity::class.java)
             startActivity(intent)
         }
 
         binding.listButton.setOnClickListener {
-            // Navigate to My Slam Book Activity
-            val intent = Intent(this, MySlamBookActivity::class.java)
+            val intent = Intent(this, SlambookActivity::class.java).apply {
+                putExtra("personalDetails", slambookEntry) // Pass PersonalDetails to SlambookActivity
+            }
             startActivity(intent)
         }
     }
