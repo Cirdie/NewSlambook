@@ -21,13 +21,19 @@ class CreateActivity : AppCompatActivity() {
         // Initialize ProgressDialog
         progressDialog = ProgressDialog(this)
 
+        // Set up button listeners
+        setupListeners()
+    }
+
+    private fun setupListeners() {
         binding.createButton.setOnClickListener {
-            if (validateInputs()) performCreation()
+            if (validateInputs()) {
+                performCreation()
+            }
         }
 
         binding.cancelButton.setOnClickListener {
-            progressDialog.show(ProgressDialog.DialogType.ERROR, "Action Cancelled.")
-            Handler(Looper.getMainLooper()).postDelayed({ progressDialog.dismiss() }, 2000)
+            cancelCreation()
         }
     }
 
@@ -55,24 +61,44 @@ class CreateActivity : AppCompatActivity() {
     }
 
     private fun performCreation() {
+        val slambookName = binding.slambookNameInput.text.toString().trim()
+        val tagline = binding.taglineInput.text.toString().trim()
+        val slambook = Slambook(name = slambookName, tagline = tagline) // Create Slambook object
+
         progressDialog.show(ProgressDialog.DialogType.PROGRESS, "Creating your Slambook...")
 
+        // Simulate creation process
         Handler(Looper.getMainLooper()).postDelayed({
             val isSuccess = true // Simulate success or failure
-            if (isSuccess) {
-                progressDialog.show(ProgressDialog.DialogType.SUCCESS, "Slambook Created Successfully!")
 
-                // Navigate to PersonalDetailsActivity after success
-                Handler(Looper.getMainLooper()).postDelayed({
-                    progressDialog.dismiss()
-                    val intent = Intent(this, PersonalDetailsActivity::class.java)
-                    startActivity(intent)
-                    finish() // Close the current activity
-                }, 2000)
+            if (isSuccess) {
+                onCreationSuccess(slambook)
             } else {
-                progressDialog.show(ProgressDialog.DialogType.ERROR, "Failed to create Slambook.")
-                Handler(Looper.getMainLooper()).postDelayed({ progressDialog.dismiss() }, 2000)
+                onCreationFailure()
             }
-        }, 3000) // Simulate 3-second delay
+        }, 3000) // Simulated delay for creation
+    }
+
+    private fun cancelCreation() {
+        progressDialog.show(ProgressDialog.DialogType.ERROR, "Action Cancelled.")
+        Handler(Looper.getMainLooper()).postDelayed({ progressDialog.dismiss() }, 2000)
+    }
+
+    private fun onCreationSuccess(slambook: Slambook) {
+        progressDialog.show(ProgressDialog.DialogType.SUCCESS, "Slambook Created Successfully!")
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            progressDialog.dismiss()
+            val intent = Intent(this, PersonalDetailsActivity::class.java).apply {
+                putExtra("slambook", slambook) // Pass the Slambook object
+            }
+            startActivity(intent)
+            finish()
+        }, 2000) // Short delay to allow success message to display
+    }
+
+    private fun onCreationFailure() {
+        progressDialog.show(ProgressDialog.DialogType.ERROR, "Failed to create Slambook.")
+        Handler(Looper.getMainLooper()).postDelayed({ progressDialog.dismiss() }, 2000)
     }
 }

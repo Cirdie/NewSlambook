@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import com.example.slambookfinal.Favorite
 import com.example.slmabookfinal.databinding.FragmentAddFavoriteDialogBinding
 
 class AddFavoriteDialogFragment(

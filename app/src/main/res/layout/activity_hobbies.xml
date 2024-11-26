@@ -98,18 +98,20 @@
         app:layout_constraintBottom_toTopOf="@id/proceedButton"
         />
 
-    <!-- Proceed Button -->
     <Button
         android:id="@+id/proceedButton"
         android:layout_width="380dp"
         android:layout_height="48dp"
         android:background="@drawable/rounded_button_background"
         android:text="Continue"
-        android:textColor="@android:color/white"
+        android:textColor="#FFFFFF"
         android:textSize="16sp"
+        android:alpha="0.5"
+        android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="16dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

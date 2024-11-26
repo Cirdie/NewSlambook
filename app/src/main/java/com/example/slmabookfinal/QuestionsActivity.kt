@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.slmabookfinal.databinding.ActivityQuestionsBinding
+import com.example.slmabookfinal.utils.ProgressDialog
 
 class QuestionsActivity : AppCompatActivity() {
 
@@ -15,15 +16,22 @@ class QuestionsActivity : AppCompatActivity() {
     private val questionsAdapter: QuestionsAdapter by lazy {
         QuestionsAdapter(mutableListOf())
     }
+    private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityQuestionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Initialize ProgressDialog
+        progressDialog = ProgressDialog(this)
+
         setupRecyclerView()
         setupAddQuestionButton()
         setupProceedButton()
+
+        // Set initial state of the Proceed button
+        updateProceedButtonState()
     }
 
     private fun setupRecyclerView() {
@@ -39,6 +47,24 @@ class QuestionsActivity : AppCompatActivity() {
                 }
             })
         }
+
+        // Observe adapter data changes to update Proceed button state
+        questionsAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onChanged() {
+                super.onChanged()
+                updateProceedButtonState()
+            }
+
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                super.onItemRangeInserted(positionStart, itemCount)
+                updateProceedButtonState()
+            }
+
+            override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+                super.onItemRangeRemoved(positionStart, itemCount)
+                updateProceedButtonState()
+            }
+        })
     }
 
     private fun setupAddQuestionButton() {
@@ -47,6 +73,13 @@ class QuestionsActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupProceedButton() {
+        binding.proceedButton.setOnClickListener {
+            if (questionsAdapter.getCurrentQuestions().isNotEmpty()) {
+                showProgressDialogAndProceed()
+            }
+        }
+    }
 
     private fun showAddQuestionDialog() {
         val addQuestionDialog = AddQuestionDialogFragment.newInstance { question, answer ->
@@ -56,13 +89,27 @@ class QuestionsActivity : AppCompatActivity() {
         addQuestionDialog.show(supportFragmentManager, AddQuestionDialogFragment.TAG)
     }
 
-    private fun setupProceedButton() {
-        binding.proceedButton.setOnClickListener {
-            val intent = Intent(this, FavoritesActivity::class.java)
-            startActivity(intent)
-            finish()
+    private fun updateProceedButtonState() {
+        val hasQuestions = questionsAdapter.itemCount > 0
+
+        binding.proceedButton.apply {
+            isEnabled = hasQuestions
+            alpha = if (hasQuestions) 1f else 0.5f // Adjust transparency
         }
     }
 
+    private fun showProgressDialogAndProceed() {
+        progressDialog.show(ProgressDialog.DialogType.PROGRESS, "Saving your questions...")
 
+        binding.proceedButton.isEnabled = false // Prevent multiple clicks
+        binding.proceedButton.alpha = 0.5f
+
+        // Simulate a delay for saving questions
+        binding.proceedButton.postDelayed({
+            progressDialog.dismiss()
+            val intent = Intent(this, FavoritesActivity::class.java)
+            startActivity(intent)
+            finish() // Close this activity
+        }, 2000) // 2-second delay
+    }
 }
