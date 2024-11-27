@@ -1,13 +1,14 @@
 package com.example.slmabookfinal
 
-
 import java.io.Serializable
 
-data class PersonalDetails(
+data class SlambookEntry(
+    var slambookName: String = "",
+    var slambookTagline: String = "",
     var firstName: String = "",
     var lastName: String = "",
     var nickname: String = "",
-    var avatarId: Int = R.drawable.avatar1,
+    var avatarId: Int = R.drawable.avatar_placeholder,
     var gender: String? = null,
     var birthDate: Triple<Int, Int, Int>? = null,
     var age: Int? = null,
