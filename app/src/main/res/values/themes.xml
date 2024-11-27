@@ -1,9 +1,26 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.SlmaBookFinal" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Base application theme -->
+    <style name="Theme.Slambook" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary Colors -->
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorPrimaryDark">@color/primary_color</item>
+        <item name="colorAccent">@color/secondary_color</item>
+
+        <!-- Text Colors -->
+        <item name="android:textColorPrimary">@color/black</item>  <!-- Color for primary text -->
+        <item name="android:textColorSecondary">@color/dark_gray</item> <!-- Color for secondary text -->
+        <item name="android:textColor">@color/black</item> <!-- Default text color -->
+
+        <!-- Surface & Background Colors -->
+        <item name="colorOnSurface">@color/black</item> <!-- Color of text on surfaces -->
+        <item name="colorOnBackground">@color/black</item> <!-- Color of text on backgrounds -->
+
+        <!-- Status Bar -->
+        <item name="android:statusBarColor">@color/primary_color</item>
+
+        <!-- Button Style -->
+        <item name="buttonStyle">@style/Widget.AppCompat.Button</item>
     </style>
 
-    <style name="Theme.SlmaBookFinal" parent="Base.Theme.SlmaBookFinal" />
 </resources>
