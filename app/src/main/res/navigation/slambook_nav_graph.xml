@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/slambookQuestionsFragment">
+
+    <fragment
+        android:id="@+id/slambookQuestionsFragment"
+        android:name="com.example.slmabookfinal.SlambookQuestionsFragment"
+        android:label="Questions"
+         />
+
+    <fragment
+        android:id="@+id/slambookProfileFragment"
+        android:name="com.example.slmabookfinal.SlambookProfileFragment"
+        android:label="Profile"
+         />
+
+    <fragment
+        android:id="@+id/slambookFavoritesFragment"
+        android:name="com.example.slmabookfinal.SlambookFavoritesFragment"
+        android:label="Favorites"
+       />
+
+</navigation>
