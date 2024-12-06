@@ -1,6 +1,7 @@
 package com.example.slmabookfinal
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -37,6 +38,21 @@ class SlambookHomeActivity : AppCompatActivity() {
 
         // Set up BottomNavigationView to work with NavController
         NavigationUI.setupWithNavController(binding.bottomNavigation, navController)
+
+        // Get the selected slambook from the Intent
+        val selectedSlambook = intent.getSerializableExtra("selectedSlambook") as? SlambookEntry
+
+        // If selectedSlambook is not null, pass it to the ProfileFragment via Bundle
+        selectedSlambook?.let {
+            val bundle = Bundle().apply {
+                putSerializable("slambook", it) // Pass the data to the fragment
+            }
+
+            // Navigate to the ProfileFragment with the selected slambook
+            navController.navigate(R.id.slambookProfileFragment, bundle)
+        } ?: run {
+
+        }
     }
 
     override fun onBackPressed() {

@@ -32,7 +32,7 @@ class Splash : AppCompatActivity() {
 
         // Navigate to the next activity after 3 seconds
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this@Splash, SlambookHomeActivity::class.java))
+            startActivity(Intent(this@Splash, ChooseActivity::class.java))
             finish() // Remove SplashActivity from the back stack
         }, 5000) // Delay of 3 seconds
     }

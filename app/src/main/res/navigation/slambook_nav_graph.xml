@@ -2,24 +2,33 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/slambookQuestionsFragment">
+    app:startDestination="@id/slambookProfileFragment">
 
-    <fragment
-        android:id="@+id/slambookQuestionsFragment"
-        android:name="com.example.slmabookfinal.SlambookQuestionsFragment"
-        android:label="Questions"
-         />
-
+    <!-- SlambookProfileFragment (with argument) -->
     <fragment
         android:id="@+id/slambookProfileFragment"
         android:name="com.example.slmabookfinal.SlambookProfileFragment"
-        android:label="Profile"
-         />
+        android:label="Profile">
+        <argument
+            android:name="slambook"
+            app:argType="com.example.slmabookfinal.SlambookEntry" />
+    </fragment>
 
+    <!-- SlambookQuestionsFragment -->
+    <fragment
+        android:id="@+id/slambookQuestionsFragment"
+        android:name="com.example.slmabookfinal.SlambookQuestionsFragment"
+        android:label="Questions" />
+
+    <!-- SlambookFavoritesFragment -->
     <fragment
         android:id="@+id/slambookFavoritesFragment"
         android:name="com.example.slmabookfinal.SlambookFavoritesFragment"
-        android:label="Favorites"
-       />
+        android:label="Favorites" />
 
+    <!-- SlambookHobbiesFragment -->
+    <fragment
+        android:id="@+id/slambookHobbiesFragment"
+        android:name="com.example.slmabookfinal.SlambookHobbiesFragment"
+        android:label="Hobbies" />
 </navigation>

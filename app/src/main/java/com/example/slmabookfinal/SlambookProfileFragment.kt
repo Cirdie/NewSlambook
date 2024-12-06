@@ -1,55 +1,59 @@
 package com.example.slmabookfinal
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import com.example.slmabookfinal.databinding.FragmentSlambookProfileBinding
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SlambookProfileFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SlambookProfileFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private lateinit var binding: FragmentSlambookProfileBinding
+    private var slambook: SlambookEntry? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentSlambookProfileBinding.inflate(inflater, container, false)
+
+        // Retrieve the slambook entry passed in the arguments
+        slambook = arguments?.getSerializable("slambook") as? SlambookEntry
+
+        // If no slambook data is passed, show a toast message and log it
+        if (slambook == null) {
+            Log.e("SlambookProfileFragment", "No slambook data passed to the fragment")
+            Toast.makeText(requireContext(), "No slambook data available", Toast.LENGTH_SHORT).show()
+        } else {
+            // If slambook is not null, bind the data to the views
+            displayProfile(slambook!!)
         }
+
+        return binding.root
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_slambook_profile, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SlambookProfileFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic fun newInstance(param1: String, param2: String) =
-                SlambookProfileFragment().apply {
-                    arguments = Bundle().apply {
-                        putString(ARG_PARAM1, param1)
-                        putString(ARG_PARAM2, param2)
-                    }
-                }
+    private fun displayProfile(slambook: SlambookEntry) {
+        // Bind the slambook data to the UI components in the layout
+        binding.profileImage.setImageResource(slambook.avatarId)
+        binding.profileName.text = "${slambook.firstName} ${slambook.lastName}"
+        binding.profileNicknameValue.text = slambook.nickname ?: "N/A"
+        binding.profileEmailValue.text = slambook.email ?: "N/A"
+        binding.profilePhoneValue.text = slambook.phone ?: "N/A"
+        binding.genderValue.text = slambook.gender ?: "N/A"
+        binding.birthdateValue.text = slambook.birthDate?.let {
+            "${it.second}/${it.first}/${it.third}"
+        } ?: "N/A"
+        binding.ageValue.text = slambook.age?.toString() ?: "N/A"
+        binding.weightValue.text = slambook.weight ?: "N/A"
+        binding.heightValue.text = slambook.height ?: "N/A"
+        binding.addressValue.text = slambook.address ?: "N/A"
+        binding.facebookUrl.text = slambook.facebookLink ?: "N/A"
+        binding.instagramUrl.text = slambook.instagramLink ?: "N/A"
+        binding.twitterUrl.text = slambook.twitterLink ?: "N/A"
     }
 }
+
+

@@ -76,7 +76,7 @@ class PersonalDetails3Activity : AppCompatActivity() {
             progressDialog.dismiss()
 
             // Navigate back to the main menu (ChooseActivity)
-            val intent = Intent(this, HobbiesActivity::class.java)
+            val intent = Intent(this, ChooseActivity::class.java)
             startActivity(intent)
             finish()
         }, 2000) // Simulate delay
