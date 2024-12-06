@@ -1,11 +1,11 @@
 package com.example.slmabookfinal
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.slmabookfinal.databinding.ActivitySlambookHomeBinding
@@ -13,6 +13,7 @@ import com.example.slmabookfinal.databinding.ActivitySlambookHomeBinding
 class SlambookHomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySlambookHomeBinding
+    private lateinit var sharedViewModel: SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +21,9 @@ class SlambookHomeActivity : AppCompatActivity() {
         // Inflate the layout using ViewBinding
         binding = ActivitySlambookHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Initialize the ViewModel
+        sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
 
         // Enable edge-to-edge layout for a better user experience
         enableEdgeToEdge()
@@ -42,16 +46,9 @@ class SlambookHomeActivity : AppCompatActivity() {
         // Get the selected slambook from the Intent
         val selectedSlambook = intent.getSerializableExtra("selectedSlambook") as? SlambookEntry
 
-        // If selectedSlambook is not null, pass it to the ProfileFragment via Bundle
+        // If selectedSlambook is not null, set it in the ViewModel
         selectedSlambook?.let {
-            val bundle = Bundle().apply {
-                putSerializable("slambook", it) // Pass the data to the fragment
-            }
-
-            // Navigate to the ProfileFragment with the selected slambook
-            navController.navigate(R.id.slambookProfileFragment, bundle)
-        } ?: run {
-
+            sharedViewModel.setSlambookData(it)
         }
     }
 
@@ -61,9 +58,9 @@ class SlambookHomeActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         val navController = navHostFragment.navController
 
+        // If the navigation controller can pop a fragment, do it
         if (!navController.popBackStack()) {
-            moveTaskToBack(true)
-        } else {
+            // If no fragment left, handle back press normally (finish the activity)
             super.onBackPressed()
         }
     }

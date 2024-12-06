@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.example.slmabookfinal.databinding.FragmentSlambookProfileBinding
 
 class SlambookProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentSlambookProfileBinding
-    private var slambook: SlambookEntry? = null
+    private val sharedViewModel: SharedViewModel by activityViewModels() // Shared ViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -20,17 +22,16 @@ class SlambookProfileFragment : Fragment() {
     ): View? {
         binding = FragmentSlambookProfileBinding.inflate(inflater, container, false)
 
-        // Retrieve the slambook entry passed in the arguments
-        slambook = arguments?.getSerializable("slambook") as? SlambookEntry
-
-        // If no slambook data is passed, show a toast message and log it
-        if (slambook == null) {
-            Log.e("SlambookProfileFragment", "No slambook data passed to the fragment")
-            Toast.makeText(requireContext(), "No slambook data available", Toast.LENGTH_SHORT).show()
-        } else {
-            // If slambook is not null, bind the data to the views
-            displayProfile(slambook!!)
-        }
+        // Observe the slambook data from the ViewModel
+        sharedViewModel.slambookData.observe(viewLifecycleOwner, Observer { slambook ->
+            if (slambook == null) {
+                Log.e("SlambookProfileFragment", "No slambook data available")
+                Toast.makeText(requireContext(), "No slambook data available", Toast.LENGTH_SHORT).show()
+            } else {
+                // Bind the data to the UI
+                displayProfile(slambook)
+            }
+        })
 
         return binding.root
     }
@@ -55,5 +56,3 @@ class SlambookProfileFragment : Fragment() {
         binding.twitterUrl.text = slambook.twitterLink ?: "N/A"
     }
 }
-
-

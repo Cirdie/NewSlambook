@@ -18,17 +18,30 @@
     <fragment
         android:id="@+id/slambookQuestionsFragment"
         android:name="com.example.slmabookfinal.SlambookQuestionsFragment"
-        android:label="Questions" />
+        android:label="Questions">
+        <argument
+            android:name="slambook"
+            app:argType="com.example.slmabookfinal.SlambookEntry" />
+    </fragment>
 
     <!-- SlambookFavoritesFragment -->
     <fragment
         android:id="@+id/slambookFavoritesFragment"
         android:name="com.example.slmabookfinal.SlambookFavoritesFragment"
-        android:label="Favorites" />
+        android:label="Favorites">
+        <argument
+            android:name="slambook"
+            app:argType="com.example.slmabookfinal.SlambookEntry" />
+    </fragment>
 
     <!-- SlambookHobbiesFragment -->
     <fragment
         android:id="@+id/slambookHobbiesFragment"
         android:name="com.example.slmabookfinal.SlambookHobbiesFragment"
-        android:label="Hobbies" />
+        android:label="Hobbies">
+        <argument
+            android:name="slambook"
+            app:argType="com.example.slmabookfinal.SlambookEntry" />
+    </fragment>
+
 </navigation>

@@ -38,6 +38,9 @@ class PersonalDetails3Activity : AppCompatActivity() {
         val email = binding.emailInput.text.toString().trim()
         val phone = binding.phoneInput.text.toString().trim()
         val address = binding.addressInput.text.toString().trim()
+        val facebook = binding.facebookInput.text.toString().trim()
+        val instagram = binding.instagramInput.text.toString().trim()
+        val twitter = binding.twitterInput.text.toString().trim()
 
         // Validate input fields
         when {
@@ -53,12 +56,27 @@ class PersonalDetails3Activity : AppCompatActivity() {
                 binding.addressInput.error = "Address is required"
                 return
             }
+            facebook.isEmpty() -> {
+                binding.facebookInput.error = "Facebook URL is required"
+                return
+            }
+            instagram.isEmpty() -> {
+                binding.instagramInput.error = "Instagram URL is required"
+                return
+            }
+            twitter.isEmpty() -> {
+                binding.twitterInput.error = "Twitter URL is required"
+                return
+            }
         }
 
         // Save the inputs to SlambookEntry
         slambookEntry.email = email
         slambookEntry.phone = phone
         slambookEntry.address = address
+        slambookEntry.facebookLink = facebook
+        slambookEntry.instagramLink = instagram
+        slambookEntry.twitterLink = twitter
 
         // Proceed to save the data
         saveSlambookAndFinish()
