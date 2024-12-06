@@ -3,6 +3,7 @@ package com.example.slmabookfinal
 import java.io.Serializable
 
 data class SlambookEntry(
+    // Basic Information
     var slambookName: String = "",
     var slambookTagline: String = "",
     var firstName: String = "",
@@ -19,5 +20,16 @@ data class SlambookEntry(
     var address: String = "",
     var facebookLink: String? = null,
     var instagramLink: String? = null,
-    var twitterLink: String? = null
+    var twitterLink: String? = null,
+
+    // Questions
+    var questions: List<Question> = emptyList(),
+
+    // Favorites
+    var favorites: List<Favorite> = emptyList(),
+
+    // Hobbies
+    var hobbies: List<Hobby> = emptyList()
 ) : Serializable
+
+
