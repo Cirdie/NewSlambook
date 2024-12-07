@@ -78,25 +78,25 @@ class PersonalDetails3Activity : AppCompatActivity() {
         slambookEntry.instagramLink = instagram
         slambookEntry.twitterLink = twitter
 
-        // Proceed to save the data
-        saveSlambookAndFinish()
+        // Proceed to HobbiesActivity with the updated slambookEntry data
+        proceedToHobbiesActivity()
     }
 
-    private fun saveSlambookAndFinish() {
-        // Add the completed entry to the repository
-        SlambookRepository.addSlambook(slambookEntry)
-
-        // Show progress dialog
-        progressDialog.show(ProgressDialog.DialogType.PROGRESS, "Finalizing...")
+    private fun proceedToHobbiesActivity() {
+        // Show progress dialog (optional)
+        progressDialog.show(ProgressDialog.DialogType.PROGRESS, "Saving your data...")
 
         // Simulate saving process
         Handler(Looper.getMainLooper()).postDelayed({
+            // Dismiss progress dialog after saving
             progressDialog.dismiss()
 
-            // Navigate back to the main menu (ChooseActivity)
-            val intent = Intent(this, ChooseActivity::class.java)
+            // Pass the SlambookEntry to the HobbiesActivity
+            val intent = Intent(this, HobbiesActivity::class.java).apply {
+                putExtra("slambookEntry", slambookEntry)  // Passing data to next activity
+            }
             startActivity(intent)
-            finish()
-        }, 2000) // Simulate delay
+            finish()  // Finish current activity to move to the next one
+        }, 2000) // Simulate 2-second delay
     }
 }

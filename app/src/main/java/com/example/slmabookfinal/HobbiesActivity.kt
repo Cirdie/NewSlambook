@@ -15,9 +15,10 @@ class HobbiesActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHobbiesBinding
     private val hobbiesAdapter: HobbiesAdapter by lazy {
-        HobbiesAdapter(mutableListOf())
+        HobbiesAdapter(mutableListOf(), isSelectable = true, showRemoveButton = true) // Show Remove Button
     }
     private lateinit var progressDialog: ProgressDialog
+    private lateinit var slambookEntry: SlambookEntry
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +27,10 @@ class HobbiesActivity : AppCompatActivity() {
 
         // Initialize progress dialog
         progressDialog = ProgressDialog(this)
+
+        // Retrieve SlambookEntry passed from previous activity
+        slambookEntry = intent.getSerializableExtra("slambookEntry") as? SlambookEntry
+            ?: SlambookEntry()
 
         setupRecyclerView()
         setupAddHobbyButton()
@@ -77,6 +82,9 @@ class HobbiesActivity : AppCompatActivity() {
     private fun setupProceedButton() {
         binding.proceedButton.setOnClickListener {
             if (hobbiesAdapter.getCurrentHobbies().isNotEmpty()) {
+                // Save the selected hobbies in SlambookEntry
+                slambookEntry.hobbies = hobbiesAdapter.getSelectedHobbies()
+
                 showProgressDialogAndProceed()
             }
         }
@@ -99,17 +107,28 @@ class HobbiesActivity : AppCompatActivity() {
     }
 
     private fun showProgressDialogAndProceed() {
+        // Show the progress dialog to indicate saving process
         progressDialog.show(ProgressDialog.DialogType.PROGRESS, "Saving your hobbies...")
 
-        binding.proceedButton.isEnabled = false // Prevent multiple clicks
+        // Disable the proceed button to prevent multiple clicks during the saving process
+        binding.proceedButton.isEnabled = false
         binding.proceedButton.alpha = 0.5f
 
-        // Simulate a delay for saving hobbies
+        // Update the SlambookEntry with the selected hobbies from the adapter
+        slambookEntry.hobbies = hobbiesAdapter.getCurrentHobbies()
+
+        // Simulate a saving process delay (2 seconds in this case)
         binding.proceedButton.postDelayed({
+            // Dismiss the progress dialog after the saving delay
             progressDialog.dismiss()
-            val intent = Intent(this, QuestionsActivity::class.java)
+
+            // Save the updated SlambookEntry in the repository
+            SlambookRepository.addSlambook(slambookEntry)
+
+            // Navigate to the ChooseActivity after saving the SlambookEntry
+            val intent = Intent(this, ChooseActivity::class.java)
             startActivity(intent)
             finish() // Close this activity
-        }, 2000) // 2-second delay
+        }, 2000) // 2-second delay to simulate the saving process
     }
 }
