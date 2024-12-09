@@ -3,9 +3,9 @@ package com.example.slmabookfinal
 import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
+import android.service.quickaccesswallet.QuickAccessWalletService
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.slmabookfinal.databinding.ActivityHobbiesBinding
@@ -30,7 +30,7 @@ class HobbiesActivity : AppCompatActivity() {
 
         // Retrieve SlambookEntry passed from previous activity
         slambookEntry = intent.getSerializableExtra("slambookEntry") as? SlambookEntry
-            ?: SlambookEntry()
+            ?: SlambookEntry() // If it's null, create a new one
 
         setupRecyclerView()
         setupAddHobbyButton()
@@ -85,7 +85,8 @@ class HobbiesActivity : AppCompatActivity() {
                 // Save the selected hobbies in SlambookEntry
                 slambookEntry.hobbies = hobbiesAdapter.getSelectedHobbies()
 
-                showProgressDialogAndProceed()
+                // Proceed to the next activity, passing the updated SlambookEntry (no repository save yet)
+                proceedToQuestionsActivity()
             }
         }
     }
@@ -106,11 +107,11 @@ class HobbiesActivity : AppCompatActivity() {
         }
     }
 
-    private fun showProgressDialogAndProceed() {
-        // Show the progress dialog to indicate saving process
+    private fun proceedToQuestionsActivity() {
+        // Show the progress dialog to indicate the process
         progressDialog.show(ProgressDialog.DialogType.PROGRESS, "Saving your hobbies...")
 
-        // Disable the proceed button to prevent multiple clicks during the saving process
+        // Disable the proceed button to prevent multiple clicks during the process
         binding.proceedButton.isEnabled = false
         binding.proceedButton.alpha = 0.5f
 
@@ -122,11 +123,9 @@ class HobbiesActivity : AppCompatActivity() {
             // Dismiss the progress dialog after the saving delay
             progressDialog.dismiss()
 
-            // Save the updated SlambookEntry in the repository
-            SlambookRepository.addSlambook(slambookEntry)
-
-            // Navigate to the ChooseActivity after saving the SlambookEntry
-            val intent = Intent(this, ChooseActivity::class.java)
+            // Pass the SlambookEntry to QuestionsActivity without saving it in the repository
+            val intent = Intent(this, QuestionsActivity::class.java)
+            intent.putExtra("slambookEntry", slambookEntry) // Pass data to the next activity
             startActivity(intent)
             finish() // Close this activity
         }, 2000) // 2-second delay to simulate the saving process
