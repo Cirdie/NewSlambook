@@ -1,41 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/itemContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="16dp"
     android:background="@drawable/item_background"
+    android:padding="16dp"
     android:layout_marginBottom="8dp">
 
-    <!-- Avatar -->
+    <!-- Avatar Image -->
     <ImageView
         android:id="@+id/avatarImageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/avatar_placeholder"
-        android:layout_gravity="center_vertical"
         android:contentDescription="Avatar"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-    <!-- Slambook Info -->
+    <!-- Text Container -->
     <LinearLayout
+        android:id="@+id/textContainer"
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
+        app:layout_constraintStart_toEndOf="@id/avatarImageView"
+        app:layout_constraintEnd_toStartOf="@id/divider"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginStart="16dp">
 
-        <!-- Name -->
+        <!-- Name Text -->
         <TextView
             android:id="@+id/slambookNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SLAMBOOK NAME"
-            android:textStyle="bold"
             android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/primary_color"
             android:layout_marginBottom="4dp" />
 
-        <!-- Tagline -->
+        <!-- Tagline Text -->
         <TextView
             android:id="@+id/taglineTextView"
             android:layout_width="wrap_content"
@@ -44,4 +53,37 @@
             android:textSize="14sp"
             android:textColor="#888888" />
     </LinearLayout>
-</LinearLayout>
+
+    <!-- Vertical Divider -->
+    <View
+        android:id="@+id/divider"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="@color/light_gray"
+        app:layout_constraintStart_toEndOf="@id/textContainer"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginHorizontal="8dp" />
+
+    <!-- Buttons Container -->
+    <LinearLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/divider">
+
+        <!-- Remove Button -->
+        <ImageView
+            android:id="@+id/removeButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_delete"
+            android:contentDescription="Remove Item"
+            android:layout_marginStart="8dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

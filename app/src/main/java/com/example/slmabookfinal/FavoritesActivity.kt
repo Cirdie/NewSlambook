@@ -1,11 +1,13 @@
 package com.example.slmabookfinal
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.slmabookfinal.databinding.ActivityFavoritesBinding
 import com.example.slmabookfinal.utils.ProgressDialog
 
@@ -13,13 +15,14 @@ class FavoritesActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityFavoritesBinding
     private lateinit var progressDialog: ProgressDialog
+    private lateinit var slambookEntry: SlambookEntry
 
     private val favorites = mutableListOf(
-        Favorite(category = "Movies"),
-        Favorite(category = "Music"),
-        Favorite(category = "Colors"),
-        Favorite(category = "Books"),
-        Favorite(category = "Sports")
+        Favorite(category = "Movies", items = mutableListOf()),
+        Favorite(category = "Music", items = mutableListOf()),
+        Favorite(category = "Colors", items = mutableListOf()),
+        Favorite(category = "Books", items = mutableListOf()),
+        Favorite(category = "Sports", items = mutableListOf())
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,68 +30,116 @@ class FavoritesActivity : AppCompatActivity() {
         binding = ActivityFavoritesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialize ProgressDialog
         progressDialog = ProgressDialog(this)
 
-        // Initialize Create Slambook button visibility
+        slambookEntry = intent.getSerializableExtra("slambookEntry") as? SlambookEntry
+            ?: SlambookEntry()
+
         updateCreateSlambookButtonState()
 
-        // Set up Add button listeners
-        binding.addMovieButton.setOnClickListener {
-            showAddFavoriteDialog(favorites[0], R.drawable.ic_movies, binding.favoriteMoviesList)
-        }
-        binding.addMusicButton.setOnClickListener {
-            showAddFavoriteDialog(favorites[1], R.drawable.ic_music, binding.favoriteMusicList)
-        }
-        binding.addColorButton.setOnClickListener {
-            showAddFavoriteDialog(favorites[2], R.drawable.ic_colors, binding.favoriteColorsList)
-        }
-        binding.addBooksButton.setOnClickListener {
-            showAddFavoriteDialog(favorites[3], R.drawable.ic_books, binding.favoriteBooksList)
-        }
-        binding.addSportsButton.setOnClickListener {
-            showAddFavoriteDialog(favorites[4], R.drawable.ic_sports, binding.favoriteSportsList)
-        }
+        // Set up Add buttons for all categories
+        setUpAddButtons()
 
-        // Handle Create Slambook button click
+        // Set up RecyclerViews for each category
+        setUpRecyclerView(binding.favoriteMoviesRecyclerView, favorites[0].items)
+        setUpRecyclerView(binding.favoriteMusicRecyclerView, favorites[1].items)
+        setUpRecyclerView(binding.favoriteColorsRecyclerView, favorites[2].items)
+        setUpRecyclerView(binding.favoriteBooksRecyclerView, favorites[3].items)
+        setUpRecyclerView(binding.favoriteSportsRecyclerView, favorites[4].items)
+
         binding.createSlambookButton.setOnClickListener {
+            saveFavoritesToSlambookEntry()
             showProgressAndComplete()
         }
     }
 
-    private fun showAddFavoriteDialog(favorite: Favorite, iconResId: Int, textView: TextView) {
-        val dialog = AddFavoriteDialogFragment(
-            favorite = favorite,
-            iconResId = iconResId
-        ) { updatedFavorite ->
-            // Update the corresponding TextView when an item is added
-            textView.text = updatedFavorite.items.joinToString("\n") { "• $it" }
-            textView.visibility = View.VISIBLE // Show the list if it was hidden
-            updateCreateSlambookButtonState() // Update the Create Slambook button state
+    private fun setUpAddButtons() {
+        binding.addMovieButton.setOnClickListener {
+            showAddFavoriteDialog(favorites[0], binding.favoriteMoviesRecyclerView, R.drawable.ic_movies)
+        }
+        binding.addMusicButton.setOnClickListener {
+            showAddFavoriteDialog(favorites[1], binding.favoriteMusicRecyclerView, R.drawable.ic_music)
+        }
+        binding.addColorButton.setOnClickListener {
+            showAddFavoriteDialog(favorites[2], binding.favoriteColorsRecyclerView, R.drawable.ic_colors)
+        }
+        binding.addBookButton.setOnClickListener {
+            showAddFavoriteDialog(favorites[3], binding.favoriteBooksRecyclerView, R.drawable.ic_books)
+        }
+        binding.addSportButton.setOnClickListener {
+            showAddFavoriteDialog(favorites[4], binding.favoriteSportsRecyclerView, R.drawable.ic_sports)
+        }
+    }
+
+    private fun setUpRecyclerView(recyclerView: RecyclerView, items: MutableList<String>) {
+        val adapter = FavoritesAdapter(items) { item ->
+            // Handle delete action
+            items.remove(item)
+            recyclerView.adapter?.notifyDataSetChanged() // Reset the RecyclerView UI
+            updateCreateSlambookButtonState()
+        }
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
+
+        // Set up ItemTouchHelper for swipe-to-reveal functionality
+        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                // Toggle the swipe state for the item
+                (recyclerView.adapter as FavoritesAdapter).toggleSwipe(position)
+            }
+        })
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
+    private fun showAddFavoriteDialog(favorite: Favorite, recyclerView: RecyclerView, iconResId: Int) {
+        val dialog = AddFavoriteDialogFragment(favorite, iconResId) { updatedFavorite ->
+            recyclerView.adapter = FavoritesAdapter(updatedFavorite.items) { item ->
+                updatedFavorite.items.remove(item)
+                recyclerView.adapter?.notifyDataSetChanged()
+                updateCreateSlambookButtonState()
+            }
+            updateCreateSlambookButtonState()
         }
         dialog.show(supportFragmentManager, "AddFavoriteDialog")
     }
 
     private fun updateCreateSlambookButtonState() {
-        // Check if at least one favorite has items
         val hasFavorites = favorites.any { it.items.isNotEmpty() }
         binding.createSlambookButton.apply {
             isEnabled = hasFavorites
-            alpha = if (hasFavorites) 1f else 0.5f // Adjust transparency
+            alpha = if (hasFavorites) 1f else 0.5f
         }
+    }
+
+    private fun saveFavoritesToSlambookEntry() {
+        slambookEntry.favorites = favorites // Save all favorites to SlambookEntry
     }
 
     private fun showProgressAndComplete() {
         progressDialog.show(ProgressDialog.DialogType.PROGRESS, "Creating your Slambook...")
 
-        binding.createSlambookButton.isEnabled = false // Prevent multiple clicks
+        binding.createSlambookButton.isEnabled = false
         binding.createSlambookButton.alpha = 0.5f
 
-        // Simulate a delay for the creation process
         Handler(Looper.getMainLooper()).postDelayed({
             progressDialog.dismiss()
-            // Proceed to the next activity or finalize the process
-            finish()
-        }, 2000) // 2-second delay
+
+            SlambookRepository.addSlambook(slambookEntry)
+
+            proceedToChooseActivity()
+        }, 2000)
+    }
+
+    private fun proceedToChooseActivity() {
+        val intent = Intent(this, ChooseActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

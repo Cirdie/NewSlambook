@@ -8,16 +8,28 @@
     android:background="@drawable/background_minimalist"
     tools:context=".PersonalDetails3Activity">
 
-    <!-- Back Button -->
-    <ImageView
-        android:id="@+id/backButton"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:contentDescription="Back Button"
-        android:src="@drawable/ic_back"
-        app:layout_constraintStart_toStartOf="parent"
+    <LinearLayout
+        android:id="@+id/headerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="16dp" />
+        android:layout_margin="16dp">
+
+
+        <TextView
+            android:id="@+id/titleactivity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Your Personal Details"
+            android:textColor="@color/primary_color"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+    </LinearLayout>
 
     <!-- Title -->
     <TextView
@@ -28,7 +40,7 @@
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="@color/primary_color"
-        app:layout_constraintTop_toBottomOf="@id/backButton"
+        app:layout_constraintTop_toBottomOf="@id/headerContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
@@ -72,10 +84,12 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="Enter your email"
-            android:background="@drawable/underline_edittext_background"
+            android:background="@drawable/rounded_edittext_background"
             android:padding="8dp"
             android:textSize="16sp"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            android:singleLine="true"
+            android:imeOptions="actionNext"/>
 
         <!-- Phone Number -->
         <TextView
@@ -89,13 +103,16 @@
             android:layout_marginBottom="4dp" />
         <EditText
             android:id="@+id/phoneInput"
+            android:hint="Enter your number"
+
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:hint="Enter your phone number"
-            android:background="@drawable/underline_edittext_background"
+            android:background="@drawable/rounded_edittext_background"
             android:padding="8dp"
             android:textSize="16sp"
-            android:inputType="phone" />
+            android:inputType="phone"
+            android:singleLine="true"
+            android:imeOptions="actionNext"/>
 
         <!-- Address -->
         <TextView
@@ -112,17 +129,19 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:hint="Enter your address"
-            android:background="@drawable/underline_edittext_background"
+            android:background="@drawable/rounded_edittext_background"
             android:padding="8dp"
             android:textSize="16sp"
-            android:inputType="textPostalAddress" />
+            android:inputType="textPostalAddress"
+            android:singleLine="true"
+            android:imeOptions="actionNext"/>
 
         <!-- Social Media Section -->
         <TextView
             android:id="@+id/socialMediaLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Social Media Links"
+            android:text="Social Media Profile"
             android:textSize="16sp"
             android:textColor="#000000"
             android:layout_marginTop="16dp"
@@ -147,11 +166,13 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:hint="Paste your profile link here."
-                android:background="@drawable/underline_edittext_background"
+                android:hint="Facebook Profile"
+                android:background="@drawable/rounded_edittext_background"
                 android:padding="8dp"
                 android:textSize="16sp"
-                android:inputType="textUri" />
+                android:inputType="textUri"
+                android:singleLine="true"
+                android:imeOptions="actionNext"/>
         </LinearLayout>
 
         <!-- Instagram -->
@@ -174,11 +195,13 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:hint="Paste your profile link here."
-                android:background="@drawable/underline_edittext_background"
+                android:hint="Instagram Profile"
+                android:background="@drawable/rounded_edittext_background"
                 android:padding="8dp"
                 android:textSize="16sp"
-                android:inputType="textUri" />
+                android:inputType="textUri"
+                android:singleLine="true"
+                android:imeOptions="actionNext"/>
         </LinearLayout>
 
         <!-- Twitter -->
@@ -201,11 +224,13 @@
                 android:layout_width="0dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
-                android:hint="Paste your profile link here."
-                android:background="@drawable/underline_edittext_background"
+                android:hint="Twitter Profile"
+                android:background="@drawable/rounded_edittext_background"
                 android:padding="8dp"
                 android:textSize="16sp"
-                android:inputType="textUri" />
+                android:inputType="textUri"
+                android:singleLine="true"
+                android:imeOptions="actionNext"/>
         </LinearLayout>
     </LinearLayout>
 

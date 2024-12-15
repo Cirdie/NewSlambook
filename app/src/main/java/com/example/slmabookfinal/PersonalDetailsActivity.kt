@@ -14,6 +14,9 @@ class PersonalDetailsActivity : AppCompatActivity() {
     private lateinit var progressDialog: ProgressDialog
     private lateinit var slambookEntry: SlambookEntry
 
+    // Define the placeholder drawable ID (replace with your actual placeholder ID)
+    private val AVATAR_PLACEHOLDER_ID = R.drawable.avatar_placeholder
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityPersonalDetailsBinding.inflate(layoutInflater)
@@ -26,7 +29,13 @@ class PersonalDetailsActivity : AppCompatActivity() {
         progressDialog = ProgressDialog(this)
 
         // Set avatar and button actions
-        binding.avatarImageView.setImageResource(slambookEntry.avatarId)
+        if (slambookEntry.avatarId != 0) {
+            binding.avatarImageView.setImageResource(slambookEntry.avatarId)
+        } else {
+            binding.avatarImageView.setImageResource(AVATAR_PLACEHOLDER_ID)
+            slambookEntry.avatarId = AVATAR_PLACEHOLDER_ID
+        }
+
         binding.changeAvatarButton.setOnClickListener { openAvatarSelection() }
         binding.continueButton.setOnClickListener { validateInputs() }
     }
@@ -48,6 +57,16 @@ class PersonalDetailsActivity : AppCompatActivity() {
             }
             nickname.isEmpty() -> {
                 binding.nicknameInput.error = "Nickname is required"
+                return
+            }
+            slambookEntry.avatarId == AVATAR_PLACEHOLDER_ID -> {  // Check if placeholder avatar is selected
+                progressDialog.show(ProgressDialog.DialogType.ERROR, "Please select a valid avatar.")
+
+                // Automatically dismiss the error dialog after 2 seconds
+                Handler(Looper.getMainLooper()).postDelayed({
+                    progressDialog.dismiss()
+                }, 2000)
+
                 return
             }
             else -> {

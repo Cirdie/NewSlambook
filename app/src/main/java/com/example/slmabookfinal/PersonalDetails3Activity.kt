@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Patterns
 import androidx.appcompat.app.AppCompatActivity
 import com.example.slmabookfinal.databinding.ActivityPersonalDetails3Binding
 import com.example.slmabookfinal.utils.ProgressDialog
@@ -31,7 +32,6 @@ class PersonalDetails3Activity : AppCompatActivity() {
 
         // Set up button listeners
         binding.continueButton.setOnClickListener { validateInputs() }
-        binding.backButton.setOnClickListener { finish() }
     }
 
     private fun validateInputs() {
@@ -42,35 +42,25 @@ class PersonalDetails3Activity : AppCompatActivity() {
         val instagram = binding.instagramInput.text.toString().trim()
         val twitter = binding.twitterInput.text.toString().trim()
 
-        // Validate input fields
-        when {
-            email.isEmpty() -> {
-                binding.emailInput.error = "Email is required"
-                return
-            }
-            phone.isEmpty() -> {
-                binding.phoneInput.error = "Phone is required"
-                return
-            }
-            address.isEmpty() -> {
-                binding.addressInput.error = "Address is required"
-                return
-            }
-            facebook.isEmpty() -> {
-                binding.facebookInput.error = "Facebook URL is required"
-                return
-            }
-            instagram.isEmpty() -> {
-                binding.instagramInput.error = "Instagram URL is required"
-                return
-            }
-            twitter.isEmpty() -> {
-                binding.twitterInput.error = "Twitter URL is required"
-                return
-            }
+        // Validate email format
+        if (email.isNotEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.emailInput.error = "Please enter a valid email address"
+            return
         }
 
-        // Save the inputs to SlambookEntry
+        // Validate phone number (1 to 11 digits only)
+        if (phone.isNotEmpty() && !phone.matches("^\\d{1,11}$".toRegex())) {
+            binding.phoneInput.error = "Phone number should be 1 to 11 digits"
+            return
+        }
+
+        // Validate address (Required field)
+        if (address.isEmpty()) {
+            binding.addressInput.error = "Address is required"
+            return
+        }
+
+        // Save the inputs to SlambookEntry (Optional fields: Facebook, Instagram, Twitter)
         slambookEntry.email = email
         slambookEntry.phone = phone
         slambookEntry.address = address

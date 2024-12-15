@@ -9,29 +9,40 @@
     android:background="@drawable/background_minimalist"
     tools:context=".PersonalDetailsActivity">
 
-    <!-- Back Button -->
-    <ImageView
-        android:id="@+id/backButton"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:contentDescription="Back Button"
-        android:src="@drawable/ic_back"
-        app:layout_constraintStart_toStartOf="parent"
+    <LinearLayout
+        android:id="@+id/headerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp" />
+        android:layout_margin="16dp">
+
+
+        <TextView
+            android:id="@+id/titleactivity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Your Personal Details"
+            android:textColor="@color/primary_color"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+    </LinearLayout>
 
     <!-- Title -->
     <TextView
         android:id="@+id/topTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Visitor Check-In"
+        android:text="Set Up Profile"
         android:textColor="@color/primary_color"
         android:textSize="26sp"
         android:textStyle="bold"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/backButton"
+        app:layout_constraintTop_toBottomOf="@id/headerContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp" />
@@ -126,7 +137,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="16dp" />
+        android:layout_marginHorizontal="16dp"
+        android:singleLine="true"
+        android:imeOptions="actionNext"/>
 
     <!-- Last Name Input -->
     <EditText
@@ -141,7 +154,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="16dp" />
+        android:layout_marginHorizontal="16dp"
+        android:singleLine="true"
+        android:imeOptions="actionNext"/>
 
     <!-- Nickname Input -->
     <EditText
@@ -156,7 +171,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="16dp" />
+        android:layout_marginHorizontal="16dp"
+        android:singleLine="true"
+        android:imeOptions="actionNext"/>
 
     <!-- Continue Button -->
     <Button

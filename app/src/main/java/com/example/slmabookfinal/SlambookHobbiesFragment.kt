@@ -29,7 +29,7 @@ class SlambookHobbiesFragment : Fragment() {
         // Observe the slambook data from the ViewModel
         sharedViewModel.slambookData.observe(viewLifecycleOwner, Observer { slambook ->
             if (slambook == null) {
-                binding.hobbiesText.text = "No hobbies selected yet"
+                binding.hobbiesTitle.text = "No hobbies selected yet"
             } else {
                 displayHobbies(slambook)
             }
@@ -39,8 +39,8 @@ class SlambookHobbiesFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        // Pass showRemoveButton = false to hide the remove icon/button in this fragment
-        hobbiesAdapter = HobbiesAdapter(mutableListOf(), isSelectable = false, showRemoveButton = false)
+        // Initialize the adapter with no selection logic and no remove button
+        hobbiesAdapter = HobbiesAdapter(mutableListOf(), showRemoveButton = false)
 
         binding.hobbiesRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
@@ -51,9 +51,9 @@ class SlambookHobbiesFragment : Fragment() {
     private fun displayHobbies(slambook: SlambookEntry) {
         if (slambook.hobbies.isNotEmpty()) {
             hobbiesAdapter.updateHobbies(slambook.hobbies)
-            binding.hobbiesText.text = "Your Hobbies"
+            binding.hobbiesTitle.text = "Your Hobbies"
         } else {
-            binding.hobbiesText.text = "No hobbies selected yet"
+            binding.hobbiesTitle.text = "No hobbies selected yet"
         }
     }
 }

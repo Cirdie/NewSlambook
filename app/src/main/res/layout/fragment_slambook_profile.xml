@@ -9,6 +9,18 @@
     android:background="@drawable/background_minimalist"
     tools:context=".SlambookProfileFragment">
 
+    <!-- Back Button -->
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_back"
+    android:contentDescription="Back"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="16dp" />
+
     <!-- Title -->
     <TextView
         android:id="@+id/yourProfileTitle"
@@ -19,9 +31,10 @@
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/backButton"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp" />
 
 
     <LinearLayout

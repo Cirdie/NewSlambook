@@ -8,4 +8,8 @@ object SlambookRepository {
     }
 
     fun getSlambooks(): List<SlambookEntry> = slambooks
+
+    fun deleteSlambook(slambook: SlambookEntry) {
+        slambooks.remove(slambook)
+    }
 }

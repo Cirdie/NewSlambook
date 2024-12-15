@@ -11,8 +11,8 @@
     <!-- Icon -->
     <ImageView
         android:id="@+id/hobbyIcon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
         android:src="@drawable/ic_hobbies"
         android:contentDescription="Hobby Icon"
         app:layout_constraintTop_toTopOf="parent"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:text="Add Hobbies"
         android:textColor="@color/dark_gray"
-        android:textSize="23sp"
+        android:textSize="19sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/hobbyIcon"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,8 +38,8 @@
     <!-- Remove Button -->
     <ImageView
         android:id="@+id/removeHobbyButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
         android:src="@drawable/ic_delete"
         android:contentDescription="Remove Hobby"
         android:visibility="gone"

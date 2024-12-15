@@ -22,6 +22,11 @@ class SlambookProfileFragment : Fragment() {
     ): View? {
         binding = FragmentSlambookProfileBinding.inflate(inflater, container, false)
 
+        // Handle back button click
+        binding.backButton.setOnClickListener {
+            requireActivity().finish() // Finish the parent activity
+        }
+
         // Observe the slambook data from the ViewModel
         sharedViewModel.slambookData.observe(viewLifecycleOwner, Observer { slambook ->
             if (slambook == null) {
@@ -35,6 +40,7 @@ class SlambookProfileFragment : Fragment() {
 
         return binding.root
     }
+
 
     private fun displayProfile(slambook: SlambookEntry) {
         // Bind the slambook data to the UI components in the layout

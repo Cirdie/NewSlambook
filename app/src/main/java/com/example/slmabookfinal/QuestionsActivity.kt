@@ -4,7 +4,9 @@ import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.slmabookfinal.databinding.ActivityQuestionsBinding
@@ -13,58 +15,58 @@ import com.example.slmabookfinal.utils.ProgressDialog
 class QuestionsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityQuestionsBinding
-    private val questionsAdapter: QuestionsAdapter by lazy {
-        QuestionsAdapter(mutableListOf(), showRemoveButton = true) { updatedQuestions ->
-            // Handle saving the updated questions when they change
-            slambookEntry.questions = updatedQuestions
-        }
-    }
     private lateinit var progressDialog: ProgressDialog
     private lateinit var slambookEntry: SlambookEntry
+
+    // Adapter for managing the list of questions
+    private val questionsAdapter: QuestionsAdapter by lazy {
+        QuestionsAdapter(mutableListOf(), showRemoveButton = true) { question ->
+            showUpdateQuestionDialog(question) // Trigger update dialog when update button is clicked
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityQuestionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialize ProgressDialog
+        // Initialize the ProgressDialog
         progressDialog = ProgressDialog(this)
 
-        // Retrieve SlambookEntry passed from the previous activity (including hobbies and any previous data)
-        slambookEntry = intent.getSerializableExtra("slambookEntry") as? SlambookEntry
-            ?: SlambookEntry()  // If null, initialize a new SlambookEntry
-
-        // Log to verify the slambookEntry data (e.g., hobbies and existing questions)
-        println("SlambookEntry Hobbies: ${slambookEntry.hobbies}")
-        println("SlambookEntry Questions: ${slambookEntry.questions}")
+        // Retrieve SlambookEntry from the intent
+        slambookEntry = intent.getSerializableExtra("slambookEntry") as? SlambookEntry ?: SlambookEntry()
 
         // Set up RecyclerView for displaying questions
         setupRecyclerView()
 
-        // Set up "Add Question" button and "Proceed" button
+        // Initialize buttons (Add Question and Proceed)
         setupAddQuestionButton()
         setupProceedButton()
 
-        // Update the Proceed button state based on questions entered
+        // Update Proceed button state based on questions entered
         updateProceedButtonState()
     }
 
-    // Set up RecyclerView to display the questions
+    // Setup RecyclerView for displaying questions
     private fun setupRecyclerView() {
         binding.questionsRecyclerView.apply {
             layoutManager = LinearLayoutManager(this@QuestionsActivity)
             adapter = questionsAdapter
 
-            // Add spacing between items in RecyclerView
-            addItemDecoration(object : RecyclerView.ItemDecoration() {
-                override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-                    outRect.top = 16 // Spacing in dp
-                    outRect.bottom = 16
+            // Add ItemTouchHelper for swipe-to-reveal delete/update buttons
+            val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+                override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean = false
+
+                // Handle swipe event to toggle delete/update button visibility
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val position = viewHolder.adapterPosition
+                    questionsAdapter.toggleSwipe(position)
                 }
             })
+            itemTouchHelper.attachToRecyclerView(this)
         }
 
-        // Observe changes in questions list to update the state of the Proceed button
+        // Observe changes to the questions list and update the Proceed button state accordingly
         questionsAdapter.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onChanged() = updateProceedButtonState()
             override fun onItemRangeInserted(positionStart: Int, itemCount: Int) = updateProceedButtonState()
@@ -72,68 +74,80 @@ class QuestionsActivity : AppCompatActivity() {
         })
     }
 
-    // Set up "Add Question" button to show the dialog for adding a question
+    // Setup the "Add Question" button
     private fun setupAddQuestionButton() {
         binding.addQuestionButton.setOnClickListener {
             showAddQuestionDialog()
         }
     }
 
-    // Set up "Proceed" button to handle saving and transitioning to the next activity
+    // Setup the "Proceed" button
     private fun setupProceedButton() {
         binding.proceedButton.setOnClickListener {
-            if (questionsAdapter.getCurrentQuestions().isNotEmpty()) {
-                // Save the current questions in the SlambookEntry
-                slambookEntry.questions = questionsAdapter.getCurrentQuestions()
-
-                // Proceed with the saving process
-                showProgressDialogAndProceed()
+            val currentQuestions = questionsAdapter.getCurrentQuestions()
+            if (currentQuestions.isNotEmpty()) {
+                slambookEntry.questions = currentQuestions // Save the questions in the SlambookEntry
+                showProgressDialogAndProceed() // Proceed with saving the data
+            } else {
+                // Provide feedback if no questions have been added
+                showToast("Please add at least one question.")
             }
         }
     }
 
-    // Show "Add Question" dialog when the user clicks the "Add Question" button
+    // Show the dialog to add a new question
     private fun showAddQuestionDialog() {
+        val newQuestionId = (questionsAdapter.getCurrentQuestions().size + 1)
+
         val addQuestionDialog = AddQuestionDialogFragment.newInstance { question, answer ->
-            val newQuestion = Question(question, answer)
+            val newQuestion = Question(id = newQuestionId, questionText = question, answerText = answer)
             questionsAdapter.addQuestion(newQuestion) // Add the new question to the RecyclerView
         }
+
         addQuestionDialog.show(supportFragmentManager, AddQuestionDialogFragment.TAG)
     }
 
-    // Update the Proceed button's state based on whether questions have been added
+    // Show the dialog to update an existing question
+    private fun showUpdateQuestionDialog(question: Question) {
+        val updateQuestionDialog = UpdateQuestionDialogFragment.newInstance(question) { updatedQuestion ->
+            questionsAdapter.updateQuestion(updatedQuestion) // Update the question in the RecyclerView
+        }
+        updateQuestionDialog.show(supportFragmentManager, UpdateQuestionDialogFragment.TAG)
+    }
+
+    // Update the "Proceed" button state (enabled or disabled) based on whether there are questions
     private fun updateProceedButtonState() {
         val hasQuestions = questionsAdapter.getCurrentQuestions().isNotEmpty()
 
         binding.proceedButton.apply {
             isEnabled = hasQuestions
-            alpha = if (hasQuestions) 1f else 0.5f // Adjust transparency for disabled state
+            alpha = if (hasQuestions) 1f else 0.5f // Adjust transparency for the disabled state
         }
     }
 
+    // Show the progress dialog and proceed with saving the questions
     private fun showProgressDialogAndProceed() {
-        // Show progress dialog to indicate the saving process
         progressDialog.show(ProgressDialog.DialogType.PROGRESS, "Saving your questions...")
 
-        // Disable the Proceed button to prevent multiple clicks during the saving process
+        // Disable the Proceed button during the saving process to prevent multiple clicks
         binding.proceedButton.isEnabled = false
         binding.proceedButton.alpha = 0.5f
 
-        // Simulate a saving process delay (2 seconds in this case)
+        // Simulate a delay (2 seconds) to represent the saving process
         binding.proceedButton.postDelayed({
-            // Dismiss the progress dialog after the saving delay
-            progressDialog.dismiss()
+            progressDialog.dismiss() // Dismiss the progress dialog
 
-            // Save the updated SlambookEntry with questions (and hobbies) in the repository
-            SlambookRepository.addSlambook(slambookEntry)
-
-            // The updated SlambookEntry (with the new questions) will now be passed to the next activity
-            val intent = Intent(this, ChooseActivity::class.java).apply {
-                putExtra("slambookEntry", slambookEntry)  // Pass the entire updated SlambookEntry
+            // Proceed to the next activity and pass the updated SlambookEntry
+            val intent = Intent(this, FavoritesActivity::class.java).apply {
+                putExtra("slambookEntry", slambookEntry) // Pass the updated SlambookEntry
             }
-            startActivity(intent) // Start the ChooseActivity
-            finish() // Close this activity
-        }, 2000) // 2-second delay to simulate saving process
+            startActivity(intent) // Start the FavoritesActivity
+            finish() // Close the current activity
+        }, 2000) // 2-second delay for the simulation
     }
 
+    // Show a Toast message for feedback
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 }

@@ -26,7 +26,7 @@ data class SlambookEntry(
     var questions: List<Question> = emptyList(),
 
     // Favorites
-    var favorites: MutableList<Favorite> = mutableListOf(), // Same here for mutable collection
+    var favorites: List<Favorite> = emptyList(),
 
     // Hobbies
     var hobbies: List<Hobby> = emptyList()

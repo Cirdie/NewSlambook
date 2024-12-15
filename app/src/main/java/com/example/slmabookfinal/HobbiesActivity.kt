@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.service.quickaccesswallet.QuickAccessWalletService
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.slmabookfinal.databinding.ActivityHobbiesBinding
@@ -15,7 +16,7 @@ class HobbiesActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHobbiesBinding
     private val hobbiesAdapter: HobbiesAdapter by lazy {
-        HobbiesAdapter(mutableListOf(), isSelectable = true, showRemoveButton = true) // Show Remove Button
+        HobbiesAdapter(mutableListOf(), showRemoveButton = true) // Show Remove Button
     }
     private lateinit var progressDialog: ProgressDialog
     private lateinit var slambookEntry: SlambookEntry
@@ -45,13 +46,20 @@ class HobbiesActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@HobbiesActivity)
             adapter = hobbiesAdapter
 
-            // Add spacing between items
-            addItemDecoration(object : RecyclerView.ItemDecoration() {
-                override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-                    outRect.top = 16 // Spacing in dp
-                    outRect.bottom = 16
+            // Add ItemTouchHelper for swipe-to-delete functionality
+            val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean = false
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val position = viewHolder.adapterPosition
+                    hobbiesAdapter.toggleSwipe(position) // Handle the swipe
                 }
             })
+            itemTouchHelper.attachToRecyclerView(this)
         }
 
         // Observe adapter data changes to update Proceed button state
@@ -83,7 +91,7 @@ class HobbiesActivity : AppCompatActivity() {
         binding.proceedButton.setOnClickListener {
             if (hobbiesAdapter.getCurrentHobbies().isNotEmpty()) {
                 // Save the selected hobbies in SlambookEntry
-                slambookEntry.hobbies = hobbiesAdapter.getSelectedHobbies()
+                slambookEntry.hobbies = hobbiesAdapter.getCurrentHobbies()
 
                 // Proceed to the next activity, passing the updated SlambookEntry (no repository save yet)
                 proceedToQuestionsActivity()
@@ -131,3 +139,4 @@ class HobbiesActivity : AppCompatActivity() {
         }, 2000) // 2-second delay to simulate the saving process
     }
 }
+

@@ -9,16 +9,32 @@
     android:background="@drawable/background_minimalist"
     tools:context=".PersonalDetails2Activity">
 
-    <!-- Back Button -->
-    <ImageView
-        android:id="@+id/backButton"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:contentDescription="Back Button"
-        android:src="@drawable/ic_back"
-        app:layout_constraintStart_toStartOf="parent"
+    <LinearLayout
+        android:id="@+id/headerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_margin="16dp" />
+        android:layout_margin="16dp">
+
+
+        <TextView
+            android:id="@+id/titleactivity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Your Personal Details"
+            android:textColor="@color/primary_color"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+
+
+
 
     <!-- Title -->
     <TextView
@@ -29,7 +45,7 @@
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="@color/primary_color"
-        app:layout_constraintTop_toBottomOf="@id/backButton"
+        app:layout_constraintTop_toBottomOf="@id/headerContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp" />
@@ -211,60 +227,78 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp" />
 
-
-    <!-- Weight Section -->
-    <TextView
-        android:id="@+id/weightLabel"
+    <!-- Weight and Height Section (Vertical layout) -->
+    <LinearLayout
+        android:id="@+id/weightHeightContainer"
         android:layout_width="380dp"
         android:layout_height="wrap_content"
-        android:text="Weight"
-        android:textSize="16sp"
-        android:textColor="#000000"
-        app:layout_constraintTop_toBottomOf="@id/ageInput"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        android:orientation="vertical"
+    android:gravity="center"
+    app:layout_constraintTop_toBottomOf="@id/ageInput"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:layout_marginTop="16dp"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
 
-    <EditText
-        android:id="@+id/weightInput"
-        android:layout_width="380dp"
-        android:layout_height="50dp"
-        android:hint="Kg"
-        android:background="@drawable/underline_edittext_background"
-        android:padding="8dp"
-        android:textSize="16sp"
-        android:inputType="numberDecimal"
-        app:layout_constraintTop_toBottomOf="@id/weightLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
-
-    <!-- Height Section -->
-    <TextView
-        android:id="@+id/heightLabel"
-        android:layout_width="380dp"
+    <!-- Weight Spinner -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Height"
-        android:textSize="16sp"
-        android:textColor="#000000"
-        app:layout_constraintTop_toBottomOf="@id/weightInput"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="8dp">
 
-    <EditText
-        android:id="@+id/heightInput"
-        android:layout_width="380dp"
-        android:layout_height="50dp"
-        android:hint="Ft In"
-        android:background="@drawable/underline_edittext_background"
-        android:padding="8dp"
-        android:textSize="16sp"
-        android:inputType="numberDecimal"
-        app:layout_constraintTop_toBottomOf="@id/heightLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+        <TextView
+            android:id="@+id/weightLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please Select Weight (Kg)"
+            android:textSize="14sp"
+            android:textColor="#000000" />
+
+        <Spinner
+            android:id="@+id/weightSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+        android:background="@drawable/rounded_edittext_background"
+        android:layout_marginTop="10dp"
+        android:padding="8dp" />
+    </LinearLayout>
+
+    <!-- Spacer between Weight and Height -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
+
+    <!-- Height Spinner -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/heightLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please Select Heigh (Ft)"
+            android:textSize="14sp"
+            android:textColor="#000000" />
+
+        <Spinner
+            android:id="@+id/heightSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/rounded_edittext_background"
+            android:layout_marginTop="10dp"
+            android:padding="8dp"
+            android:spinnerMode="dropdown" />
+
+    </LinearLayout>
+</LinearLayout>
+
 
     <!-- Continue Button -->
     <Button
@@ -275,7 +309,7 @@
         android:text="Continue"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/heightInput"
+        app:layout_constraintTop_toBottomOf="@id/weightHeightContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp" />

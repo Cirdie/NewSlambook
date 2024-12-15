@@ -2,50 +2,86 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/questionContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/question_item_background"
     android:padding="16dp">
 
-    <!-- Question Text -->
-    <TextView
-        android:id="@+id/questionText"
+    <!-- Question and Answer Container -->
+    <LinearLayout
+        android:id="@+id/textContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Question Text"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/primary_color"
-        android:ellipsize="end"
-        android:maxLines="2"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/divider"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/removeQuestionButton"
-        app:layout_constraintBottom_toTopOf="@id/answerText"
-        android:layout_marginBottom="8dp" />
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <!-- Answer Text -->
-    <TextView
-        android:id="@+id/answerText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Answer Text"
-        android:textSize="14sp"
-        android:textColor="@color/dark_gray"
-        app:layout_constraintTop_toBottomOf="@id/questionText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/removeQuestionButton"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        <!-- Question Text -->
+        <TextView
+            android:id="@+id/questionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Question Text"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/primary_color"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:layout_marginBottom="8dp" />
 
-    <!-- Remove Button -->
-    <ImageView
-        android:id="@+id/removeQuestionButton"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/ic_delete"
-        android:contentDescription="Remove Question"
+        <!-- Answer Text -->
+        <TextView
+            android:id="@+id/answerText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Answer Text"
+            android:textSize="14sp"
+            android:textColor="@color/dark_gray"
+            android:ellipsize="end"
+            android:maxLines="3" />
+    </LinearLayout>
+
+    <!-- Vertical Divider -->
+    <View
+        android:id="@+id/divider"
+        android:layout_width="1dp"
+        android:layout_height="0dp"
+        android:background="@color/light_gray"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/textContainer"
+        android:layout_marginHorizontal="8dp" />
+
+    <!-- Buttons Container -->
+    <LinearLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/divider">
+
+        <!-- Update Button -->
+        <ImageView
+            android:id="@+id/updateQuestionButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_update"
+            android:contentDescription="Update Question"
+            android:layout_marginEnd="8dp" />
+
+        <!-- Remove Button -->
+        <ImageView
+            android:id="@+id/removeQuestionButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_delete"
+            android:contentDescription="Remove Question" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

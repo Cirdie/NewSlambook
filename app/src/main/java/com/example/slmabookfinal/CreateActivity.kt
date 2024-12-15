@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.slmabookfinal.databinding.ActivityCreateBinding
 import com.example.slmabookfinal.utils.ProgressDialog
@@ -14,8 +15,7 @@ class CreateActivity : AppCompatActivity() {
     private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityCreateBinding.inflate(layoutInflater)
+        super.onCreate(savedInstanceState) 
         setContentView(binding.root)
 
         progressDialog = ProgressDialog(this)
@@ -30,8 +30,14 @@ class CreateActivity : AppCompatActivity() {
             }
         }
         binding.cancelButton.setOnClickListener {
-            progressDialog.show(ProgressDialog.DialogType.ERROR, "Cancelled.")
-            Handler(Looper.getMainLooper()).postDelayed({ progressDialog.dismiss() }, 2000)
+            // Show a progress dialog indicating the cancellation
+            progressDialog.show(ProgressDialog.DialogType.ERROR, "Creating of Slambook Cancelled")
+
+            // Delay to dismiss the dialog and navigate back
+            Handler(Looper.getMainLooper()).postDelayed({
+                progressDialog.dismiss()
+                finish()
+            }, 2000) // Dismiss after 2 seconds
         }
     }
 

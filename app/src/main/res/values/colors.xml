@@ -1,4 +1,4 @@
-<resources>
+    <resources>
     <color name="primary_color">#491B6D</color>
     <color name="secondary_color">#FFCDD2</color>
     <color name="black">#1D1D1D</color>
@@ -8,4 +8,6 @@
     <color name="white">#FFFFFF</color>
     <color name="text_primary">#000000</color> <!-- Black or dark primary -->
     <color name="text_secondary">#757575</color> <!-- Grey secondary -->
-</resources>
+        <color name="red">#FF0000</color>
+
+    </resources>
