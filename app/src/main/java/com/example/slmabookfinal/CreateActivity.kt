@@ -30,14 +30,12 @@ class CreateActivity : AppCompatActivity() {
             }
         }
         binding.cancelButton.setOnClickListener {
-            // Show a progress dialog indicating the cancellation
             progressDialog.show(ProgressDialog.DialogType.ERROR, "Creating of Slambook Cancelled")
 
-            // Delay to dismiss the dialog and navigate back
             Handler(Looper.getMainLooper()).postDelayed({
                 progressDialog.dismiss()
                 finish()
-            }, 2000) // Dismiss after 2 seconds
+            }, 2000)
         }
     }
 

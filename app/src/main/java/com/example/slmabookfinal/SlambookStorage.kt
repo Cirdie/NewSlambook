@@ -1,6 +1,6 @@
 package com.example.slmabookfinal
 
-object SlambookRepository {
+object SlambookStorage {
     private val slambooks = mutableListOf<SlambookEntry>()
 
     fun addSlambook(slambook: SlambookEntry) {

@@ -20,13 +20,10 @@ class SlambookFavoritesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
         binding = FragmentSlambookFavoritesBinding.inflate(inflater, container, false)
 
-        // Initialize RecyclerView Adapters
         setupAdapters()
 
-        // Observe the slambook data from the ViewModel
         sharedViewModel.slambookData.observe(viewLifecycleOwner, Observer { slambook ->
             if (slambook == null) {
                 displayEmptyState()

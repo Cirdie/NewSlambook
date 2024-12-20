@@ -6,8 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.slmabookfinal.databinding.ItemIconBinding
 
 class IconAdapter(
-    private val icons: List<Int>, // List of icon resource IDs
-    private val onIconSelected: (Int) -> Unit // Callback for icon selection
+    private val icons: List<Int>,
+    private val onIconSelected: (Int) -> Unit
 ) : RecyclerView.Adapter<IconAdapter.IconViewHolder>() {
 
     private var selectedIcon: Int? = null
@@ -16,13 +16,12 @@ class IconAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(iconResId: Int) {
             binding.iconImage.setImageResource(iconResId)
-            // Highlight the selected icon
             binding.iconImage.alpha = if (selectedIcon == iconResId) 1.0f else 0.5f
 
             binding.root.setOnClickListener {
                 selectedIcon = iconResId
                 onIconSelected(iconResId)
-                notifyDataSetChanged() // Update all items to reflect selection
+                notifyDataSetChanged()
             }
         }
     }

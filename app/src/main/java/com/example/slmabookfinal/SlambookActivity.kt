@@ -11,29 +11,25 @@ class SlambookActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySlambookBinding
     private lateinit var adapter: SlambookListAdapter
-    private val slambooks = mutableListOf<SlambookEntry>() // MutableList for dynamic updates
+    private val slambooks = mutableListOf<SlambookEntry>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySlambookBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Load slambooks from repository
-        slambooks.addAll(SlambookRepository.getSlambooks())
+        slambooks.addAll(SlambookStorage.getSlambooks())
 
         setupRecyclerView()
 
-        // Set up click listener for creating new slambook
         binding.createSlambookButton.setOnClickListener {
             startActivity(Intent(this, CreateActivity::class.java))
         }
 
-        // Update UI based on whether there are slambooks
         updateEmptyState()
     }
 
     private fun setupRecyclerView() {
-        // Initialize adapter with click and remove callbacks
         adapter = SlambookListAdapter(
             slambooks = slambooks,
             onItemClick = { selectedSlambook ->
@@ -44,13 +40,11 @@ class SlambookActivity : AppCompatActivity() {
             }
         )
 
-        // Set up RecyclerView
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
     }
 
     private fun openSlambookHomeActivity(slambook: SlambookEntry) {
-        // Start SlambookHomeActivity with selected slambook
         val intent = Intent(this, SlambookHomeActivity::class.java).apply {
             putExtra("selectedSlambook", slambook)
         }
@@ -58,16 +52,13 @@ class SlambookActivity : AppCompatActivity() {
     }
 
     private fun deleteSlambook(slambook: SlambookEntry) {
-        // Remove from repository
-        SlambookRepository.deleteSlambook(slambook)
+        SlambookStorage.deleteSlambook(slambook)
 
-        // Remove from adapter and update UI
         adapter.removeSlambook(slambook)
         updateEmptyState()
     }
 
     private fun updateEmptyState() {
-        // Show or hide empty state illustration and text
         if (slambooks.isEmpty()) {
             binding.emptyStateContainer.visibility = View.VISIBLE
             binding.recyclerView.visibility = View.GONE

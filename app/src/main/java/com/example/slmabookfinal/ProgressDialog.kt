@@ -15,7 +15,6 @@ class ProgressDialog(private val context: Context) {
     private val binding: CustomProgressDialogBinding = CustomProgressDialogBinding.inflate(LayoutInflater.from(context))
 
     init {
-        // Set up the dialog with the custom layout
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(binding.root)
         dialog.setCancelable(false)
@@ -23,10 +22,8 @@ class ProgressDialog(private val context: Context) {
     }
 
     fun show(type: DialogType, message: String) {
-        // Update the message
         binding.progressMessage.text = message
 
-        // Handle view visibility based on type
         when (type) {
             DialogType.PROGRESS -> {
                 binding.progressAnimation.visibility = View.VISIBLE
@@ -47,12 +44,10 @@ class ProgressDialog(private val context: Context) {
             }
         }
 
-        // Show the dialog
         dialog.show()
     }
 
     fun dismiss() {
-        // Dismiss the dialog
         dialog.dismiss()
     }
 

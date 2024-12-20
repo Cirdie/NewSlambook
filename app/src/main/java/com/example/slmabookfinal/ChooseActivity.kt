@@ -15,10 +15,8 @@ class ChooseActivity : AppCompatActivity() {
         binding = ActivityChooseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Retrieve or mock the personalDetails object
         slambookEntry = intent.getSerializableExtra("personalDetails") as? SlambookEntry ?: SlambookEntry()
 
-        // Set up click listeners
         binding.createButton.setOnClickListener {
             val intent = Intent(this, CreateActivity::class.java)
             startActivity(intent)
@@ -26,7 +24,7 @@ class ChooseActivity : AppCompatActivity() {
 
         binding.listButton.setOnClickListener {
             val intent = Intent(this, SlambookActivity::class.java).apply {
-                putExtra("personalDetails", slambookEntry) // Pass PersonalDetails to SlambookActivity
+                putExtra("personalDetails", slambookEntry)
             }
             startActivity(intent)
         }

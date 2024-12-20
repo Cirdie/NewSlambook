@@ -21,7 +21,7 @@ class AddQuestionDialogFragment : DialogFragment() {
         "Who is your celebrity crush?",
         "What's your most embarrassing moment?",
         "If you were stranded on an island, what three things would you take?",
-        "Custom Question" // Custom option
+        "Custom Question"
     )
 
     override fun onCreateView(
@@ -53,7 +53,6 @@ class AddQuestionDialogFragment : DialogFragment() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.questionSpinner.adapter = adapter
 
-        // Show custom input only when "Custom Question" is selected
         binding.questionSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selected = defaultQuestions[position]

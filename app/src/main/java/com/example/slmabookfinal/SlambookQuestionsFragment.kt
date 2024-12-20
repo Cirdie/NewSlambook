@@ -22,16 +22,12 @@ class SlambookQuestionsFragment : Fragment() {
     ): View? {
         binding = FragmentSlambookQuestionsBinding.inflate(inflater, container, false)
 
-        // Set up RecyclerView to display questions
         setupRecyclerView()
 
-        // Observe the Slambook data from the SharedViewModel
         sharedViewModel.slambookData.observe(viewLifecycleOwner, Observer { slambook ->
             if (slambook == null || slambook.questions.isEmpty()) {
-                // If no questions, display the appropriate message
                 binding.titleText.text = "No questions added yet"
             } else {
-                // If questions are available, display them in RecyclerView
                 displayQuestions(slambook)
             }
         })
@@ -39,9 +35,7 @@ class SlambookQuestionsFragment : Fragment() {
         return binding.root
     }
 
-    // Setup RecyclerView with QuestionsAdapter
     private fun setupRecyclerView() {
-        // Initialize the adapter with an empty list (no action needed for update/remove in this fragment)
         questionsAdapter = QuestionsAdapter(mutableListOf()) {}
 
         binding.questionsRecyclerView.apply {
@@ -50,12 +44,9 @@ class SlambookQuestionsFragment : Fragment() {
         }
     }
 
-    // Display the questions in the RecyclerView
     private fun displayQuestions(slambook: SlambookEntry) {
-        // Update the adapter with the list of questions
         questionsAdapter.updateQuestions(slambook.questions)
 
-        // Update the UI text based on whether there are questions or not
         binding.titleText.text = if (slambook.questions.isNotEmpty()) {
             "Your Questions"
         } else {

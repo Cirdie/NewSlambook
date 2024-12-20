@@ -20,13 +20,10 @@ class SlambookHobbiesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentSlambookHobbiesBinding.inflate(inflater, container, false)
 
-        // Set up the RecyclerView
         setupRecyclerView()
 
-        // Observe the slambook data from the ViewModel
         sharedViewModel.slambookData.observe(viewLifecycleOwner, Observer { slambook ->
             if (slambook == null) {
                 binding.hobbiesTitle.text = "No hobbies selected yet"
@@ -39,7 +36,6 @@ class SlambookHobbiesFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        // Initialize the adapter with no selection logic and no remove button
         hobbiesAdapter = HobbiesAdapter(mutableListOf(), showRemoveButton = false)
 
         binding.hobbiesRecyclerView.apply {

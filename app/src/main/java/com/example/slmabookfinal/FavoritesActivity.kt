@@ -37,10 +37,8 @@ class FavoritesActivity : AppCompatActivity() {
 
         updateCreateSlambookButtonState()
 
-        // Set up Add buttons for all categories
         setUpAddButtons()
 
-        // Set up RecyclerViews for each category
         setUpRecyclerView(binding.favoriteMoviesRecyclerView, favorites[0].items)
         setUpRecyclerView(binding.favoriteMusicRecyclerView, favorites[1].items)
         setUpRecyclerView(binding.favoriteColorsRecyclerView, favorites[2].items)
@@ -73,7 +71,6 @@ class FavoritesActivity : AppCompatActivity() {
 
     private fun setUpRecyclerView(recyclerView: RecyclerView, items: MutableList<String>) {
         val adapter = FavoritesAdapter(items) { item ->
-            // Handle delete action
             items.remove(item)
             recyclerView.adapter?.notifyDataSetChanged() // Reset the RecyclerView UI
             updateCreateSlambookButtonState()
@@ -81,7 +78,6 @@ class FavoritesActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
-        // Set up ItemTouchHelper for swipe-to-reveal functionality
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             override fun onMove(
                 recyclerView: RecyclerView,
@@ -91,7 +87,6 @@ class FavoritesActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                // Toggle the swipe state for the item
                 (recyclerView.adapter as FavoritesAdapter).toggleSwipe(position)
             }
         })
@@ -119,7 +114,7 @@ class FavoritesActivity : AppCompatActivity() {
     }
 
     private fun saveFavoritesToSlambookEntry() {
-        slambookEntry.favorites = favorites // Save all favorites to SlambookEntry
+        slambookEntry.favorites = favorites
     }
 
     private fun showProgressAndComplete() {
@@ -131,7 +126,7 @@ class FavoritesActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             progressDialog.dismiss()
 
-            SlambookRepository.addSlambook(slambookEntry)
+            SlambookStorage.addSlambook(slambookEntry)
 
             proceedToChooseActivity()
         }, 2000)

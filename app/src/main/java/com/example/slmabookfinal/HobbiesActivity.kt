@@ -111,32 +111,26 @@ class HobbiesActivity : AppCompatActivity() {
 
         binding.proceedButton.apply {
             isEnabled = hasHobbies
-            alpha = if (hasHobbies) 1f else 0.5f // Adjust transparency
+            alpha = if (hasHobbies) 1f else 0.5f
         }
     }
 
     private fun proceedToQuestionsActivity() {
-        // Show the progress dialog to indicate the process
         progressDialog.show(ProgressDialog.DialogType.PROGRESS, "Saving your hobbies...")
 
-        // Disable the proceed button to prevent multiple clicks during the process
         binding.proceedButton.isEnabled = false
         binding.proceedButton.alpha = 0.5f
 
-        // Update the SlambookEntry with the selected hobbies from the adapter
         slambookEntry.hobbies = hobbiesAdapter.getCurrentHobbies()
 
-        // Simulate a saving process delay (2 seconds in this case)
         binding.proceedButton.postDelayed({
-            // Dismiss the progress dialog after the saving delay
             progressDialog.dismiss()
 
-            // Pass the SlambookEntry to QuestionsActivity without saving it in the repository
             val intent = Intent(this, QuestionsActivity::class.java)
-            intent.putExtra("slambookEntry", slambookEntry) // Pass data to the next activity
+            intent.putExtra("slambookEntry", slambookEntry)
             startActivity(intent)
-            finish() // Close this activity
-        }, 2000) // 2-second delay to simulate the saving process
+            finish()
+        }, 2000)
     }
 }
 

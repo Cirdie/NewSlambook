@@ -22,7 +22,7 @@ class UpdateQuestionDialogFragment : DialogFragment() {
         "Who is your celebrity crush?",
         "What's your most embarrassing moment?",
         "If you were stranded on an island, what three things would you take?",
-        "Custom Question" // Custom option
+        "Custom Question"
     )
 
     override fun onCreateView(
@@ -36,25 +36,19 @@ class UpdateQuestionDialogFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Retrieve the passed Question object
         question = arguments?.getSerializable("question") as Question
 
-        // Initialize the UI with current question data
         setupSpinner()
 
-        // Set the answer input field to current answer value
         binding.answerInput.setText(question.answerText)
 
-        // Close the dialog
         binding.closeButton.setOnClickListener { dismiss() }
 
-        // Handle the update logic
         binding.updateButton.setOnClickListener {
             val selectedQuestion = binding.questionSpinner.selectedItem.toString()
             val customQuestion = binding.customQuestionInput.text.toString().trim()
             val updatedAnswer = binding.answerInput.text.toString().trim()
 
-            // Determine the final question text
             val finalQuestion = if (selectedQuestion == "Custom Question" && customQuestion.isNotEmpty()) {
                 customQuestion
             } else if (selectedQuestion != "Custom Question") {
@@ -83,12 +77,10 @@ class UpdateQuestionDialogFragment : DialogFragment() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.questionSpinner.adapter = adapter
 
-        // Preselect the current question in the spinner
         val currentQuestion = question.questionText
         val position = defaultQuestions.indexOf(currentQuestion).takeIf { it >= 0 } ?: defaultQuestions.size - 1
         binding.questionSpinner.setSelection(position)
 
-        // Show custom question input if the "Custom Question" is selected
         binding.questionSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selected = defaultQuestions[position]

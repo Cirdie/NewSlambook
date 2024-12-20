@@ -11,21 +11,20 @@ class FavoritesAdapter(
     private val onDeleteClicked: (String) -> Unit
 ) : RecyclerView.Adapter<FavoritesAdapter.ViewHolder>() {
 
-    private var swipedPosition: Int? = null // Track the swiped item's position
+    private var swipedPosition: Int? = null
 
     inner class ViewHolder(private val binding: ItemFavoriteBinding) : RecyclerView.ViewHolder(binding.root) {
         val itemTextView = binding.itemTextView
         val deleteButton = binding.deleteButton
 
         fun bind(item: String, isSwiped: Boolean) {
-            itemTextView.text = item // Always show the item text
+            itemTextView.text = item
 
-            // Show delete button only when the item is swiped
             deleteButton.visibility = if (isSwiped) View.VISIBLE else View.GONE
 
             // Set delete button click listener
             deleteButton.setOnClickListener {
-                onDeleteClicked(item) // Invoke the delete action
+                onDeleteClicked(item)
                 removeItem(adapterPosition)
             }
         }
@@ -38,18 +37,17 @@ class FavoritesAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        val isSwiped = swipedPosition == position // Check if this item is swiped
+        val isSwiped = swipedPosition == position
         holder.bind(item, isSwiped)
     }
 
     override fun getItemCount(): Int = items.size
 
-    // Function to remove an item by position
     fun removeItem(position: Int) {
         if (position >= 0 && position < items.size) {
             items.removeAt(position)
             if (swipedPosition == position) {
-                swipedPosition = null // Reset swipe state after deletion
+                swipedPosition = null
             }
             notifyItemRemoved(position)
         }
@@ -58,11 +56,11 @@ class FavoritesAdapter(
     // Function to toggle the swiped state
     fun toggleSwipe(position: Int) {
         val previousSwipedPosition = swipedPosition
-        swipedPosition = if (swipedPosition == position) null else position // Toggle swipe state
+        swipedPosition = if (swipedPosition == position) null else position
         if (previousSwipedPosition != null) {
-            notifyItemChanged(previousSwipedPosition) // Reset previous swiped item
+            notifyItemChanged(previousSwipedPosition)
         }
-        notifyItemChanged(position) // Update newly swiped item
+        notifyItemChanged(position)
     }
 
     fun updateFavorites(newFavorites: List<String>) {

@@ -14,7 +14,6 @@ class PersonalDetailsActivity : AppCompatActivity() {
     private lateinit var progressDialog: ProgressDialog
     private lateinit var slambookEntry: SlambookEntry
 
-    // Define the placeholder drawable ID (replace with your actual placeholder ID)
     private val AVATAR_PLACEHOLDER_ID = R.drawable.avatar_placeholder
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,13 +21,11 @@ class PersonalDetailsActivity : AppCompatActivity() {
         binding = ActivityPersonalDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Retrieve the SlambookEntry object passed from CreateActivity
         slambookEntry = intent.getSerializableExtra("slambookEntry") as? SlambookEntry
             ?: SlambookEntry()
 
         progressDialog = ProgressDialog(this)
 
-        // Set avatar and button actions
         if (slambookEntry.avatarId != 0) {
             binding.avatarImageView.setImageResource(slambookEntry.avatarId)
         } else {
@@ -45,7 +42,6 @@ class PersonalDetailsActivity : AppCompatActivity() {
         val lastName = binding.lastNameInput.text.toString().trim()
         val nickname = binding.nicknameInput.text.toString().trim()
 
-        // Input validation
         when {
             firstName.isEmpty() -> {
                 binding.firstNameInput.error = "First name is required"
@@ -62,7 +58,6 @@ class PersonalDetailsActivity : AppCompatActivity() {
             slambookEntry.avatarId == AVATAR_PLACEHOLDER_ID -> {  // Check if placeholder avatar is selected
                 progressDialog.show(ProgressDialog.DialogType.ERROR, "Please select a valid avatar.")
 
-                // Automatically dismiss the error dialog after 2 seconds
                 Handler(Looper.getMainLooper()).postDelayed({
                     progressDialog.dismiss()
                 }, 2000)
@@ -70,7 +65,6 @@ class PersonalDetailsActivity : AppCompatActivity() {
                 return
             }
             else -> {
-                // Save the validated data to the SlambookEntry object
                 slambookEntry.firstName = firstName
                 slambookEntry.lastName = lastName
                 slambookEntry.nickname = nickname
@@ -101,12 +95,11 @@ class PersonalDetailsActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             progressDialog.dismiss()
 
-            // Pass the updated SlambookEntry to the next activity
             val intent = Intent(this, PersonalDetails2Activity::class.java).apply {
                 putExtra("slambookEntry", slambookEntry)
             }
             startActivity(intent)
             finish()
-        }, 2000) // Simulate a delay for user experience
+        }, 2000)
     }
 }

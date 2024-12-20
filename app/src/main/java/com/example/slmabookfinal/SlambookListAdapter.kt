@@ -8,9 +8,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class SlambookListAdapter(
-    private val slambooks: MutableList<SlambookEntry>, // Use MutableList for dynamic updates
-    private val onItemClick: (SlambookEntry) -> Unit,  // Callback for item clicks
-    private val onRemoveClick: (SlambookEntry) -> Unit // Callback for remove button clicks
+    private val slambooks: MutableList<SlambookEntry>,
+    private val onItemClick: (SlambookEntry) -> Unit,
+    private val onRemoveClick: (SlambookEntry) -> Unit
 ) : RecyclerView.Adapter<SlambookListAdapter.SlambookViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SlambookViewHolder {
@@ -46,17 +46,13 @@ class SlambookListAdapter(
             onItemClick: (SlambookEntry) -> Unit,
             onRemoveClick: (SlambookEntry) -> Unit
         ) {
-            // Set avatar
             avatarImageView.setImageResource(slambook.avatarId)
 
-            // Display slambook name and tagline
             slambookNameTextView.text = slambook.slambookName
             taglineTextView.text = slambook.slambookTagline
 
-            // Attach click listener for the item
             itemView.setOnClickListener { onItemClick(slambook) }
 
-            // Attach click listener for the remove button
             removeButton.setOnClickListener { onRemoveClick(slambook) }
         }
     }

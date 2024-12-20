@@ -10,9 +10,9 @@ import androidx.fragment.app.DialogFragment
 import com.example.slmabookfinal.databinding.FragmentAddFavoriteDialogBinding
 
 class AddFavoriteDialogFragment(
-    private val favorite: Favorite, // Pass the Favorite object
-    private val iconResId: Int,     // Pass the icon resource ID
-    private val onFavoriteAdded: (Favorite) -> Unit // Callback for when an item is added
+    private val favorite: Favorite,
+    private val iconResId: Int,
+    private val onFavoriteAdded: (Favorite) -> Unit
 ) : DialogFragment() {
 
     private var _binding: FragmentAddFavoriteDialogBinding? = null
@@ -29,24 +29,21 @@ class AddFavoriteDialogFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Set category title and icon
         binding.dialogTitle.text = "Add to ${favorite.category}"
         binding.dialogIcon.setImageResource(iconResId)
 
-        // Close dialog
         binding.closeButton.setOnClickListener {
             dismiss()
         }
 
-        // Add favorite item
         binding.addFavoriteButton.setOnClickListener {
             val favoriteItem = binding.favoriteItemInput.text.toString().trim()
 
             if (favoriteItem.isEmpty()) {
                 Toast.makeText(requireContext(), "Please enter a favorite item", Toast.LENGTH_SHORT).show()
             } else {
-                favorite.items.add(favoriteItem) // Add item to the category's list
-                onFavoriteAdded(favorite) // Callback to update the activity
+                favorite.items.add(favoriteItem)
+                onFavoriteAdded(favorite)
                 dismiss()
             }
         }
@@ -54,7 +51,6 @@ class AddFavoriteDialogFragment(
 
     override fun onStart() {
         super.onStart()
-        // Set fixed dialog width
         dialog?.window?.setLayout(
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.WRAP_CONTENT

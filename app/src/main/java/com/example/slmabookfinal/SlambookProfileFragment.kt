@@ -14,7 +14,7 @@ import com.example.slmabookfinal.databinding.FragmentSlambookProfileBinding
 class SlambookProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentSlambookProfileBinding
-    private val sharedViewModel: SharedViewModel by activityViewModels() // Shared ViewModel
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,18 +22,15 @@ class SlambookProfileFragment : Fragment() {
     ): View? {
         binding = FragmentSlambookProfileBinding.inflate(inflater, container, false)
 
-        // Handle back button click
         binding.backButton.setOnClickListener {
             requireActivity().finish() // Finish the parent activity
         }
 
-        // Observe the slambook data from the ViewModel
         sharedViewModel.slambookData.observe(viewLifecycleOwner, Observer { slambook ->
             if (slambook == null) {
                 Log.e("SlambookProfileFragment", "No slambook data available")
                 Toast.makeText(requireContext(), "No slambook data available", Toast.LENGTH_SHORT).show()
             } else {
-                // Bind the data to the UI
                 displayProfile(slambook)
             }
         })
@@ -43,7 +40,6 @@ class SlambookProfileFragment : Fragment() {
 
 
     private fun displayProfile(slambook: SlambookEntry) {
-        // Bind the slambook data to the UI components in the layout
         binding.profileImage.setImageResource(slambook.avatarId)
         binding.profileName.text = "${slambook.firstName} ${slambook.lastName}"
         binding.profileNicknameValue.text = slambook.nickname ?: "N/A"
